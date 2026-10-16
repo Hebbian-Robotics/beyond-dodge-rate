@@ -1,0 +1,124 @@
+{
+  "phase": "roboletics_outage",
+  "seeds": [
+    3000,
+    3001,
+    3002,
+    3003,
+    3004,
+    3005,
+    3006,
+    3007,
+    3008,
+    3009,
+    3010,
+    3011,
+    3012,
+    3013,
+    3014,
+    3015,
+    3016,
+    3017,
+    3018,
+    3019,
+    3020,
+    3021,
+    3022,
+    3023,
+    3024,
+    3025,
+    3026,
+    3027,
+    3028,
+    3029,
+    3030,
+    3031
+  ],
+  "arms": [
+    {
+      "arm": "nominal",
+      "fault": false,
+      "response": "continue",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "outage_0_160",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.0,
+      "fault_duration_seconds": 0.16
+    },
+    {
+      "arm": "outage_0_320",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.0,
+      "fault_duration_seconds": 0.32
+    },
+    {
+      "arm": "outage_0_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.0,
+      "fault_duration_seconds": null
+    },
+    {
+      "arm": "outage_160_160",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.16
+    },
+    {
+      "arm": "outage_160_320",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.32
+    },
+    {
+      "arm": "outage_160_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null
+    },
+    {
+      "arm": "outage_320_160",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.32,
+      "fault_duration_seconds": 0.16
+    },
+    {
+      "arm": "outage_320_320",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.32,
+      "fault_duration_seconds": 0.32
+    },
+    {
+      "arm": "outage_320_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.32,
+      "fault_duration_seconds": null
+    }
+  ],
+  "episode_seconds": 4.0,
+  "workers": 4,
+  "primary_outcome": "joint_success_10",
+  "analysis_reference": "nominal",
+  "claim_scope": "one checkpoint in a deployment port; onset/duration sensitivity; simulation only",
+  "environment_version": "inactive-ball-collision-corrected-v1",
+  "analysis_status": "exploratory reanalysis of previously seen seeds"
+}

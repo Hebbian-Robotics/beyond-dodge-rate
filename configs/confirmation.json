@@ -1,0 +1,135 @@
+{
+  "phase": "confirmation",
+  "seeds": [
+    1000,
+    1001,
+    1002,
+    1003,
+    1004,
+    1005,
+    1006,
+    1007,
+    1008,
+    1009,
+    1010,
+    1011,
+    1012,
+    1013,
+    1014,
+    1015,
+    1016,
+    1017,
+    1018,
+    1019,
+    1020,
+    1021,
+    1022,
+    1023,
+    1024,
+    1025,
+    1026,
+    1027,
+    1028,
+    1029,
+    1030,
+    1031,
+    1032,
+    1033,
+    1034,
+    1035,
+    1036,
+    1037,
+    1038,
+    1039,
+    1040,
+    1041,
+    1042,
+    1043,
+    1044,
+    1045,
+    1046,
+    1047
+  ],
+  "arms": [
+    {
+      "arm": "nominal",
+      "fault": false,
+      "response": "continue",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "freeze_continue",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "freeze_plain_0",
+      "fault": true,
+      "response": "plain",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "freeze_plain_160",
+      "fault": true,
+      "response": "plain",
+      "response_delay_seconds": 0.16
+    },
+    {
+      "arm": "freeze_plain_320",
+      "fault": true,
+      "response": "plain",
+      "response_delay_seconds": 0.32
+    },
+    {
+      "arm": "freeze_hold_0",
+      "fault": true,
+      "response": "hold",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "freeze_hold_160",
+      "fault": true,
+      "response": "hold",
+      "response_delay_seconds": 0.16
+    },
+    {
+      "arm": "freeze_hold_320",
+      "fault": true,
+      "response": "hold",
+      "response_delay_seconds": 0.32
+    },
+    {
+      "arm": "freeze_default_0",
+      "fault": true,
+      "response": "default",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "freeze_default_160",
+      "fault": true,
+      "response": "default",
+      "response_delay_seconds": 0.16
+    },
+    {
+      "arm": "freeze_default_320",
+      "fault": true,
+      "response": "default",
+      "response_delay_seconds": 0.32
+    }
+  ],
+  "episode_seconds": 4.0,
+  "workers": 2,
+  "fault_onset_seconds": 1.0,
+  "primary_outcome": "joint_success_10",
+  "secondary_outcomes": [
+    "dodge",
+    "fall",
+    "contained_10",
+    "joint_success_05"
+  ],
+  "claim_scope": "one pretrained checkpoint, one deployment port, one first-throw distribution; simulation only",
+  "confirmation_rule": "Run all prespecified arms on disjoint confirmation seeds; no winner selection from pilot; retain invalid trials and require exact matched states and throws.",
+  "environment_version": "inactive-ball-collision-corrected-v1",
+  "analysis_status": "exploratory reanalysis of previously seen seeds"
+}

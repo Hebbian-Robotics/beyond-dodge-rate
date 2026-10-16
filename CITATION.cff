@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: Please cite the paper when using these results or evaluation code.
+title: "Beyond Dodge Rate: Testing Humanoid Dodgeball Under Camera Failures"
+type: software
+authors:
+  - family-names: Kuan
+    given-names: Kingston
+    affiliation: Hebbian Robotics
+  - family-names: Ong
+    given-names: Brandon
+    affiliation: Hebbian Robotics
+repository-code: https://github.com/Hebbian-Robotics/beyond-dodge-rate
+license: Apache-2.0
+preferred-citation:
+  type: unpublished
+  title: "Beyond Dodge Rate: Testing Humanoid Dodgeball Under Camera Failures"
+  authors:
+    - family-names: Kuan
+      given-names: Kingston
+    - family-names: Ong
+      given-names: Brandon
+  year: 2026
+  notes: Research draft; not submitted or accepted.

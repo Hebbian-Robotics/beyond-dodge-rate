@@ -1,0 +1,98 @@
+{
+  "phase": "common_throw_preflight_v1",
+  "policy": "upstream",
+  "seeds": [
+    9998,
+    9999
+  ],
+  "arms": [
+    {
+      "arm": "nominal",
+      "fault": false,
+      "response": "continue",
+      "response_delay_seconds": 0
+    },
+    {
+      "arm": "stale_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null,
+      "fault_frame_mode": "freeze"
+    },
+    {
+      "arm": "stale_recover_2000",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.84,
+      "fault_frame_mode": "freeze"
+    },
+    {
+      "arm": "blank_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null,
+      "fault_frame_mode": "zero"
+    },
+    {
+      "arm": "blank_recover_2000",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.84,
+      "fault_frame_mode": "zero"
+    }
+  ],
+  "episode_seconds": 4,
+  "workers": 2,
+  "analysis_reference": "stale_continuous",
+  "environment_version": "inactive-ball-collision-corrected-v1",
+  "analysis_status": "Exploratory common-trajectory control; reuses previously recorded trajectories with new simulation seeds",
+  "question": "Does the blank-versus-stale difference persist when both fixed policies receive the same absolute ball trajectories?",
+  "primary_outcome": "joint_success_10",
+  "selection_rule": "Use every declared seed and all five conditions for both policies. Donors alternate released/team healthy trials in increasing original seed order. No outcome-based selection or stopping.",
+  "primary_comparison": "Within-policy blank_continuous minus stale_continuous; paired across-policy effect difference is descriptive",
+  "secondary_comparisons": "Fresh-image restoration and donor-policy strata; nominal intervals only",
+  "replayed_throws": {
+    "9998": {
+      "time": 1.0000000000000007,
+      "target": "torso_link",
+      "start": [
+        2.0136198740426487,
+        1.1012009784028944,
+        0.4700268669744301
+      ],
+      "velocity": [
+        -3.5114696552330913,
+        -1.8601889633912279,
+        3.600990680042738
+      ],
+      "flight": 0.5874773601258435,
+      "source_policy": "upstream",
+      "source_seed": 9000
+    },
+    "9999": {
+      "time": 1.0000000000000007,
+      "target": "left_knee_link",
+      "start": [
+        1.7474036426532509,
+        0.6989369514671692,
+        0.48493677373733035
+      ],
+      "velocity": [
+        -2.9561168877596478,
+        -0.9807697584072946,
+        2.493887817879735
+      ],
+      "flight": 0.5650601068682297,
+      "source_policy": "team",
+      "source_seed": 9001
+    }
+  }
+}

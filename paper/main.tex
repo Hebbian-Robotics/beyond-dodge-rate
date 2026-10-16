@@ -1,0 +1,246 @@
+\documentclass[conference]{IEEEtran}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{amsmath,graphicx,booktabs,url}
+\ifdefined\AnonymousSubmission
+\hypersetup{pdfauthor={},pdfsubject={},pdfkeywords={}}
+\else
+\hypersetup{pdfauthor={Kingston Kuan and Brandon Ong},pdfsubject={},pdfkeywords={}}
+\fi
+\title{Beyond Dodge Rate: Testing Humanoid Dodgeball Under Camera Failures}
+\ifdefined\AnonymousSubmission
+\author{Author Names Omitted for Anonymous Review}
+\else
+\author{\IEEEauthorblockN{Kingston Kuan \quad Brandon Ong}
+\IEEEauthorblockA{Hebbian Robotics\\[0.4em]
+\url{https://hebbian-robotics.github.io/beyond-dodge-rate/}}}
+\fi
+\begin{document}
+\maketitle
+\begin{abstract}
+A humanoid robot can dodge a ball and still leave its playing area. We study
+this gap under depth-camera failures, measuring contact, balance, and area
+compliance throughout each four-second trial. Two saved G1 policies, $\pi_1$ and $\pi_2$, use the
+same training method and recorded settings but respond differently to stale
+and blank images across 192 paired test seeds per policy. For $\pi_1$, all 122 area exits under stale images occur after the throw resolves.
+In a separate fixed paired recovery test with 64 seeds, restoring fresh images
+at two seconds increases success from 50.0\% to 95.3\%, while dodge rate remains 100\%.
+Maximum excursion also decreases without an area cutoff. The same intervention
+does not improve overall success for $\pi_2$. Shared
+ball trajectories preserve the $\pi_1$ recovery benefit. These results
+support evaluating motion after an encounter and testing camera handling on the
+policy in use. They concern two fixed models in simulation and do not establish
+a universal camera fallback or hardware safety.
+\end{abstract}
+
+\section{Introduction}
+Dodge rate measures whether a robot avoids an incoming ball. It does not show
+whether the robot stays upright and inside its playing area afterward.
+A camera failure can therefore leave dodge rate nearly unchanged while causing
+failure after the encounter. We measure all three outcomes and compare camera
+inputs within two fixed policies trained with the same method and recorded settings.
+
+Our central test restores fresh images after the simulator resolves the throw.
+Matched trials share the same physical throw and camera history up to restoration,
+so the comparison measures a change in subsequent motion. A control gives both
+policies identical recorded throws; distance analyses check dependence on the
+area requirement. Building on humanoid dodgeball~\cite{pacman,vibe} and
+camera-fault evaluation~\cite{blackout}, this study tests post-encounter area
+compliance and visual recovery without a new controller or training objective.
+
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{generated/simulation-snapshots.png}
+\caption{What dodge rate misses. Exact replays of the first test seed (3000)
+for $\pi_1$, with matched views and colors changed for visibility. Top: just
+before the middle robot is hit. Bottom: the four-second endpoint. The late
+camera freeze allows a dodge but the robot leaves the 1 m area. The circle
+marks the boundary; orange shows the pelvis path. This example illustrates
+failure timing, not average performance.}
+\label{fig:simulation}
+\end{figure*}
+
+\section{Methods}
+\subsection{Policies and simulator}
+We use Russi's G1 Depth Dodge code~\cite{depthcode}, based on ViBe/ORCS~\cite{vibe},
+with LeRobot G1 deployment assets~\cite{lerobot}. The controller combines frozen
+SONIC~\cite{sonic} and Theia~\cite{theia} bases with depth adaptation trained by
+PPO~\cite{ppo} through RSL-RL in mjlab/MuJoCo Warp.
+$\pi_1$ is the released iteration-4000 model~\cite{depthrelease}; $\pi_2$ was
+trained separately by our team with the same method, architecture, and objective.
+Its saved configuration matches the released reference: seed 42, 4,000 updates,
+512 environments, and about 49.15 million transitions, distributed across eight
+GPUs in our run. The weights differ. Initialization, random-number sequences,
+and resume histories are incomplete, so these models do not constitute a
+controlled comparison of training methods or repeated training runs.
+
+Evaluation fixes the weights and native gains, torque limits, depth noise,
+active-ball collisions, and fall checks. MuJoCo 3.3.7 and ONNX Runtime 1.23.2 run
+on CPU, with 50 Hz control and 25 Hz images. We correct an inactive-ball bug by
+disabling collisions while the ball is parked below the floor and restoring
+them at launch. Twelve exact replays found no inactive-ball robot contacts or
+camera visibility. All reported trials use this correction.
+
+\subsection{Task, inputs, and matching}
+Each trial lasts four seconds unless the robot falls. One ball launches at one
+second. The native generator chooses among six body targets, adds jitter and
+$\pm30^\circ$ direction variation, and uses a nominal flight time of 0.55--0.62 s.
+Healthy depth supplies normal images; stale depth repeats the last image before
+the interruption; blank depth supplies zeros. Policy history is never reset.
+Fault onset is known; there is no learned failure detector.
+
+Within each policy and seed, we require identical prelaunch robot positions and
+velocities and matching launch time, target, ball position, velocity, and flight
+time. We also verify camera schedules; missing or mismatched trials fail analysis.
+The policies can move differently before launch and change the simulator's aim,
+so equal seed numbers do not ensure equal throws across policies. Comparisons
+therefore concern camera inputs within each policy, not a policy ranking.
+The input-handling test fixes 192 seeds (7300--7491) per policy before observing
+outcomes. Interruption starts 160 ms after launch and lasts to the endpoint.
+
+\subsection{Outcomes and uncertainty}
+Success requires dodging, staying upright, and keeping the pelvis within 1 m of
+its starting position throughout the trial. We report each outcome separately.
+The radius is an illustrative task requirement, not a court rule or injury
+threshold. A fall uses the native checks: pelvis height below 0.45 m or upright-axis
+cosine below 0.4 (about $66.4^\circ$ tilt). Aborted throws remain failures in the
+total trial count. Paired 95\% intervals use 10,000 bootstrap resamples of whole
+evaluation seeds, retaining their conditions together, with seed 20261014.
+Intervals are per comparison, without multiplicity adjustment; per-condition
+intervals are Wilson intervals. Evaluation seeds are not training replications.
+
+\subsection{Post-encounter motion and restoration}
+For all 1,152 input-handling trials, a post-hoc reanalysis locates the first
+sampled area exit relative to native throw resolution: contact for hits and
+native termination for misses. This is an accounting event, not closest approach.
+Exits strictly afterward are late; ties count as by-resolution exits. Samples
+are 20 ms apart, without interpolation; seeds and outcomes remain unchanged.
+
+The recovery test uses five conditions: healthy, continuous stale, stale with
+restoration, continuous blank, and blank with restoration. Faults start at 1.16 s;
+fresh images resume at 2 s without a history reset. After a separate exploratory
+16-seed pilot per policy (8000--8015), we fixed 64 new seeds (9000--9063) and the
+primary contrast: restored versus continuous stale input for $\pi_1$. The other
+policy and blank-input contrasts are secondary. Pilot outcomes are excluded.
+All conditions retain the four-second horizon; there is no outcome-dependent
+stopping. Matching checks verify identical physical traces before 2 s in each
+restoration pair. All stale-input throws resolve by restoration within numerical
+tolerance, so the intervention tests post-resolution motion at a fixed time.
+
+\subsection{Shared-throw control}
+An exploratory control replays 64 healthy-condition ball trajectories, taking
+32 donors from each policy without outcome filtering. Both policies face the
+same initial ball positions and velocities in all five camera conditions
+(seeds 10000--10063; 640 trials). Native collision settings and accounting remain
+unchanged; robot states can still differ. Twenty separate preflight trials and
+two exact healthy-condition replays check implementation. We resample common-throw
+seeds with both policies and all conditions together. This control is not pooled
+into the fixed recovery estimate; it reuses recorded trajectories and does not
+add independent training runs. The supplement gives donor selection and all rows.
+
+\section{Results}
+\subsection{Dodges can hide late area exits}
+Under stale input, all 122 $\pi_1$ area exits occur after throw resolution;
+121 follow a dodge. All 11 exits under blank input are also late. For $\pi_2$,
+stale input gives seven exits by resolution and three afterward; both blank-input
+exits are late. These are descriptive timings, not explanations of the weights.
+
+\subsection{Fresh images change post-encounter motion}
+\input{generated/camera-recovery-effects.tex}
+Both $\pi_1$ stale conditions dodge 64/64 throws; both $\pi_2$ stale conditions
+dodge 54/64. No recovery condition has falls or aborted throws. The intervention
+therefore changes area compliance without rescuing the initial dodge.
+Table~\ref{tab:recovery} includes all five conditions, including the smaller or
+absent effects under blank input. Figure~\ref{fig:recovery} shows when exits occur.
+For this $\pi_1$ and throw distribution, restored visual input reduces later
+area failures; it does not establish a neural mechanism or a universal fallback.
+
+\begin{table}[t]
+\caption{Fixed recovery test: 64 seeds per policy and condition. Fresh images
+resume at 2 s. Falls and aborted throws are zero. Compare conditions within
+each policy.}
+\label{tab:recovery}\centering\footnotesize
+\input{generated/camera-recovery-table.tex}
+\end{table}
+\begin{figure*}[t]
+\centering\includegraphics[width=\textwidth]{generated/camera-recovery.png}
+\caption{All 640 fixed recovery trials. Top: successes out of 64 with Wilson
+95\% intervals; paired differences are reported in the text. Bottom: fraction
+of seeds that have not yet left the area, including all trials. Curves drop at
+first exit even if the robot returns. Dotted: interruption at 1.16 s. Dashed:
+restoration at 2 s. Bottom panels show healthy and stale conditions; the top
+panels and Table~\ref{tab:recovery} include all five. Throws can differ across policies.}
+\label{fig:recovery}
+\end{figure*}
+
+\subsection{Scoring choices and continuous distance}
+A post-hoc check uses six radii (0.5--2 m) and four windows (2--4 s). Recovery
+gains accumulate late and shrink at wider boundaries: widening from 1 to 1.5 m
+at four seconds reduces the $\pi_1$ gain from 29/64 to 2/64 in the fixed cohort
+and from 37/64 to 1/64 in the control.
+\input{generated/recovery-motion-effects.tex}
+
+\subsection{Stale versus blank input}
+\input{generated/comparison-plain.tex}
+For $\pi_1$, blank input improves area compliance from 70/192 to 181/192 but
+reduces dodges from 191/192 to 182/192. For $\pi_2$, area compliance improves
+from 182/192 to 190/192 while dodges fall from 165/192 to 101/192. With no falls,
+these outcomes explain the opposite success effects (Table~\ref{tab:policies}),
+but not their cause inside the learned policies.
+\begin{table}[t]
+\caption{Input-handling test: 192 seeds per policy and condition. Success
+requires dodging, staying upright, and staying inside the 1 m area. All trials count.}
+\label{tab:policies}\centering\small
+\input{generated/policy-comparison-table.tex}
+\end{table}
+
+\subsection{Effects under shared throws}
+\input{generated/common-throw-effects.tex}
+The $\pi_2$ interval reaches zero, so this control alone does not establish a
+harmful blank-input effect for that policy. Restoring fresh images also improves
+$\pi_1$ stale-input success from 23/64 to 60/64, with 60/64 dodges in both conditions.
+$\pi_2$ changes from 46/64 to 45/64, with 52/64 dodges in both. No falls or aborted
+throws occur. The response difference therefore persists under identical ball
+trajectories, although robot states, weights, and incomplete training histories
+still differ.
+
+\section{Related Work and Limitations}
+ViBe adapts motion trackers with visual feedback~\cite{vibe}; our implementation's
+released training already includes image corruption and repeated frames~\cite{depthrelease}.
+PAC-MAN evaluates contact and falls with control-barrier guidance and returns
+the robot to its station between throws~\cite{pacman}. Our area constraint applies
+throughout a single throw. Blackout-versus-freeze work evaluates physical camera-fault
+consequences in manipulation~\cite{blackout}. We extend this evaluation question
+to humanoid evasion and post-encounter area compliance. VB-Com switches between
+vision and blind policies~\cite{vbcom}; CAP trains robustness to degraded depth~\cite{cap}.
+Our tests keep each model fixed; blank images do not make a visual model a
+separately trained blind policy.
+
+OopsieVerse separates completion from damage-free completion~\cite{oopsieverse};
+our area requirement is a task constraint, not a damage measure. LIBERO-MAX uses
+matched rollouts with execution-time changes~\cite{liberomax}; we match camera
+conditions and verify the physical throw. Reinforcement-learning reproducibility
+work documents training variability~\cite{rlrepro}, which our two models do not isolate.
+
+The evidence covers two fixed policies, one simulated robot and starting posture,
+the native throw generator, and one recorded trajectory pool. It does not establish
+hardware safety, human/team interaction, a universal fallback, or training-seed
+reliability. Pelvis containment does not ensure whole-body containment. Trial
+archives and separately trained weights remain unreleased, limiting replication;
+code, configurations, and provenance are provided through the project website.
+
+\section{Conclusion}
+A successful dodge can hide a later failure to stay inside the playing area.
+For $\pi_1$, restoring fresh images after throw resolution raises success from
+32/64 to 61/64 without changing the dodge count and reduces maximum excursion
+without an area cutoff. $\pi_2$ responds differently. These simulation findings
+support measuring post-encounter motion alongside contact and falls. Future
+work should repeat the tests across independent training runs and varied throws,
+then assess transfer to physical robots.
+
+\label{page:references}
+\bibliographystyle{plainnat}
+\bibliography{references}
+\end{document}

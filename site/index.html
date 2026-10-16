@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="Testing humanoid dodgeball under camera failures: can the robot dodge, stay upright, and remain in its playing area?" name="description"/>
+<title>Beyond Dodge Rate | Hebbian Robotics</title>
+<meta content="website" property="og:type"/>
+<meta content="https://hebbian-robotics.github.io/beyond-dodge-rate/" property="og:url"/>
+<meta content="Beyond Dodge Rate" property="og:title"/>
+<meta content="Testing Humanoid Dodgeball Under Camera Failures" property="og:description"/>
+<meta content="https://hebbian-robotics.github.io/beyond-dodge-rate/assets/social-preview.png" property="og:image"/>
+<meta content="image/png" property="og:image:type"/>
+<meta content="1731" property="og:image:width"/>
+<meta content="909" property="og:image:height"/>
+<meta content="Beyond Dodge Rate: Testing Humanoid Dodgeball Under Camera Failures, over a grid of simulation views" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Beyond Dodge Rate" name="twitter:title"/>
+<meta content="Testing Humanoid Dodgeball Under Camera Failures" name="twitter:description"/>
+<meta content="https://hebbian-robotics.github.io/beyond-dodge-rate/assets/social-preview.png" name="twitter:image"/>
+
+<link href="assets/hebbian-mark.svg" rel="icon" type="image/svg+xml"/>
+<link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet"/>
+<link href="static/css/bulma.min.css" rel="stylesheet"/>
+<link href="static/css/index.css" rel="stylesheet"/>
+<link href="static/css/project.css?v=dc498cda1c05" rel="stylesheet"/></head>
+<body><a class="skip-link" href="#findings">Skip to findings</a><main id="top"><section aria-labelledby="paper-title" class="hero">
+<div class="hero-body">
+<div class="container is-max-desktop">
+<div class="columns is-centered">
+<div class="column has-text-centered">
+<h1 class="title is-1 publication-title" id="paper-title">Beyond Dodge Rate</h1>
+<h2 class="title is-3 publication-subtitle">Testing Humanoid Dodgeball Under Camera Failures</h2>
+<div class="is-size-5 publication-authors"><span class="author-block"><a href="https://www.linkedin.com/in/kingston-kuan/">Kingston Kuan</a>,</span> <span class="author-block"><a href="https://www.linkedin.com/in/ongjjbrandon/">Brandon Ong</a></span></div>
+<div class="is-size-5 publication-authors"><span class="author-block">Hebbian Robotics</span></div>
+<div class="affiliation-logos"><img alt="Hebbian Robotics" class="affiliation-wordmark" height="157" src="assets/hebbian-wordmark.svg?v=cf42e3c90717" width="513"/></div>
+<div class="column has-text-centered">
+<div class="publication-links"><span class="link-block"><a class="external-link button is-normal is-rounded is-dark" href="paper.pdf?v=ad87eb68f446"><span aria-hidden="true" class="icon"><img alt="" height="16" src="static/icons/file-pdf.svg" width="16"/></span><span>Paper</span></a></span> <span class="link-block"><a class="external-link button is-normal is-rounded is-dark" href="supplement.pdf?v=aed8ff247455"><span aria-hidden="true" class="icon"><img alt="" height="16" src="static/icons/file-pdf.svg" width="16"/></span><span>Supplement</span></a></span> <span class="link-block"><a class="external-link button is-normal is-rounded is-dark" href="https://github.com/Hebbian-Robotics/beyond-dodge-rate"><span aria-hidden="true" class="icon"><img alt="" height="16" src="static/icons/github.svg" width="16"/></span><span>Code</span></a></span> <span class="link-block"><a class="external-link button is-normal is-rounded is-dark" href="https://youtu.be/MG4fqtBPVOY"><span aria-hidden="true" class="icon"><img alt="" height="16" src="static/icons/youtube.svg" width="16"/></span><span>Video</span></a></span> <span class="link-block"><a class="external-link button is-normal is-rounded is-dark" href="#BibTeX"><span aria-hidden="true" class="icon"><img alt="" height="16" src="static/icons/quote-right.svg" width="16"/></span><span>BibTeX</span></a></span> </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section><section class="hero teaser" id="teaser">
+<div class="container is-max-desktop">
+<div class="hero-body">
+<a aria-label="Open the high-resolution simulation figure" href="assets/simulation-snapshots.png?v=4cfc14fc3cd4">
+<img alt="Event-aligned exact simulation replays for healthy depth, a freeze at launch, and a freeze after 320 milliseconds, with measured contact and area outcomes." height="1440" src="assets/simulation-snapshots.png?v=4cfc14fc3cd4" width="2760"/>
+</a>
+<figcaption>The encounter and its consequence. The top row precedes the first measured contact, or throw resolution if all arms dodge; the bottom row shows the declared endpoint. The teal circle is the 1 m limit, and the orange line is the measured pelvis trajectory. <a href="assets/simulation-snapshots.png?v=4cfc14fc3cd4">Open full-resolution figure</a>.</figcaption>
+</div>
+</div>
+</section><section class="section">
+<div class="container is-max-desktop"><div class="columns is-centered has-text-centered">
+<div class="column is-four-fifths">
+<h2 class="title is-3">Abstract</h2>
+<div class="content has-text-justified"><p>A humanoid robot can dodge a ball and still leave its playing area. We study this gap under depth-camera failures, measuring contact, balance, and area compliance throughout each four-second trial. Two saved G1 policies, π₁ and π₂, use the same training method and recorded settings but respond differently to stale and blank images across 192 paired test seeds per policy. For π₁, all 122 area exits under stale images occur after the throw resolves. In a separate fixed paired recovery test with 64 seeds, restoring fresh images at two seconds increases success from 50.0% to 95.3%, while dodge rate remains 100%. Maximum excursion also decreases without an area cutoff. The same intervention does not improve overall success for π₂. Shared ball trajectories preserve the π₁ recovery benefit. These results support evaluating motion after an encounter and testing camera handling on the policy in use. They concern two fixed models in simulation and do not establish a universal camera fallback or hardware safety.</p></div>
+</div>
+</div><div class="columns is-centered has-text-centered" id="demo">
+<div class="column is-four-fifths">
+<h2 class="title is-3">Video</h2>
+<div class="publication-video"><iframe allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen="" height="540" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/MG4fqtBPVOY?rel=0" title="Beyond Dodge Rate research demo" width="960"></iframe></div>
+<p class="video-download"><a href="https://youtu.be/MG4fqtBPVOY">Watch on YouTube</a></p></div>
+</div></div>
+</section><section class="section"><div class="container is-max-desktop"><div class="columns is-centered simulation-comparisons" id="simulation">
+<div class="column simulation-example"><div class="content simulation-copy"><h2 class="title is-3">Restoring fresh vision</h2>
+<p>All three robots dodge the same throw. In this π₁ example, the robot stays inside the area when fresh images resume at two seconds; it leaves the area with continuously stale images or restoration at three seconds. This is the first declared recovery seed (9000), not average performance.</p></div>
+<div class="simulation-media"><video aria-label="π₁ with continuous stale images and restoration at two or three seconds" controls="" muted="" playsinline="" poster="assets/recovery-poster.png" preload="metadata"><source src="assets/recovery-symbols.mp4?v=783c3d9f2817" type="video/mp4"/></video></div>
+<details><summary>View individual conditions at full size</summary><div class="individual-videos">
+<figure><video aria-label="Vision stays stale, seed 9000" controls="" muted="" playsinline="" preload="none"><source src="assets/recovery-stale.mp4?v=c20469062dea" type="video/mp4"/></video><figcaption>Vision stays stale</figcaption></figure>
+<figure><video aria-label="Fresh vision at two seconds, seed 9000" controls="" muted="" playsinline="" preload="none"><source src="assets/recovery-two-seconds.mp4?v=21bc16206abc" type="video/mp4"/></video><figcaption>Fresh vision at two seconds</figcaption></figure>
+<figure><video aria-label="Fresh vision at three seconds, seed 9000" controls="" muted="" playsinline="" preload="none"><source src="assets/recovery-three-seconds.mp4?v=69dfc7ecc935" type="video/mp4"/></video><figcaption>Fresh vision at three seconds</figcaption></figure>
+</div></details>
+</div>
+<div class="column simulation-example"><div class="content simulation-copy"><h2 class="title is-3">Stale or blank images</h2>
+
+<p>Here we fix the failure time at 160 ms after ball launch and change the input: repeat the last depth image (stale) or supply an all-zero image (blank), alongside healthy depth. The results below test this choice on both policies and show opposite effects. This clip illustrates the second policy, using its first held-out seed (7300); it does not represent average performance. <a href="assets/team-encounter.png?v=a46d3a4b1792">View the encounter frames</a>.</p></div>
+<div class="simulation-media"><video aria-label="π₂ with healthy, stale and blank depth" controls="" muted="" playsinline="" poster="assets/team-poster.png?v=bd18e0dd6bfb" preload="metadata"><source src="assets/team-symbols.mp4?v=8e6794afe3bd" type="video/mp4"/></video></div>
+<details><summary>View individual conditions at full size</summary><div class="individual-videos">
+<figure><video aria-label="π₂ with healthy depth" controls="" muted="" playsinline="" preload="none"><source src="assets/team-nominal.mp4?v=cee50566e60a" type="video/mp4"/></video><figcaption>Healthy depth</figcaption></figure>
+<figure><video aria-label="π₂ with stale depth" controls="" muted="" playsinline="" preload="none"><source src="assets/team-outage_160_continuous.mp4?v=bb62a7eea2d8" type="video/mp4"/></video><figcaption>Stale depth after 160 ms</figcaption></figure>
+<figure><video aria-label="π₂ with blank depth" controls="" muted="" playsinline="" preload="none"><source src="assets/team-zero_160_continuous.mp4?v=ad99626a05d4" type="video/mp4"/></video><figcaption>Blank depth after 160 ms</figcaption></figure>
+</div></details>
+</div>
+</div><p class="content">Playback is half speed, with synchronized two-second holds at measured throw-resolution events and the final horizon. The orange ball retains its last recorded in-flight position for one second after native removal. It is a visual marker, not continued ball physics or a measured rebound.</p><div class="columns is-centered" id="findings">
+<div class="column is-full-width"><h2 class="title is-3">Results</h2><div class="content has-text-justified">
+<div class="section-intro">
+
+<p>A humanoid can dodge an incoming ball while moving outside its permitted area. We measure both contact avoidance and overall success: dodging, staying upright, and keeping its pelvis within a 1 m radius over four seconds.</p>
+<p>In the fixed 64-seed recovery comparison, restoring fresh images at two seconds raises π₁ success from 32/64 to 61/64, with 64/64 dodges in both conditions. The improvement is 45.3 percentage points (95% paired interval +32.8 to +57.8). Mean maximum excursion falls by 18.4 cm. Overall success for π₂ changes from 53/64 to 51/64. These are comparisons within each saved policy.</p>
+<p>Blank images improve area compliance for both models. For π₁, that benefit outweighs a small loss in dodges. For π₂, a larger loss in dodges outweighs the area benefit. We have not established why the learned models respond differently.</p><p>π₁ is the checkpoint released by Martino Russi; π₂ was trained by Hebbian Robotics using the same PPO method, architecture, objective, and recorded settings. The labels identify two saved policies. Results compare camera conditions within each policy; they do not rank the policies.</p>
+</div>
+<div class="results-layout">
+<!-- biome-ignore lint/a11y/noNoninteractiveTabindex: Keyboard users need to scroll the results table on narrow screens. -->
+<section aria-label="Checkpoint comparison results" class="table-container" tabindex="0">
+<table class="table is-fullwidth">
+<caption>192 test seeds per policy and camera condition. Every trial is counted.</caption>
+<thead><tr><th scope="col">Checkpoint</th><th scope="col">Depth input</th><th scope="col">Avoided contact</th><th scope="col">Stayed within 1 m</th><th scope="col">Overall success</th></tr></thead>
+<tbody><tr><td>π₁</td><td>Healthy</td><td>192/192</td><td>192/192</td><td>192/192</td></tr>
+<tr><td>π₁</td><td>Stale</td><td>191/192</td><td>70/192</td><td>70/192</td></tr>
+<tr><td>π₁</td><td>Blank</td><td>182/192</td><td>181/192</td><td>171/192</td></tr>
+<tr><td>π₂</td><td>Healthy</td><td>162/192</td><td>189/192</td><td>161/192</td></tr>
+<tr><td>π₂</td><td>Stale</td><td>165/192</td><td>182/192</td><td>158/192</td></tr>
+<tr><td>π₂</td><td>Blank</td><td>101/192</td><td>190/192</td><td>100/192</td></tr></tbody>
+</table>
+</section>
+<p class="result-note">Change in overall success when blank images replace stale images. π₁: +52.6 percentage points (95% paired interval +43.8 to +60.9); π₂: -30.2 percentage points (95% paired interval -37.0 to -23.4). Intervals come from resampling matched test seeds and are calculated separately for each comparison. No falls or aborted throws occurred in this comparison.</p>
+</div>
+<p class="small-note">Each policy faces the same physical throw across camera conditions. The two policies can face different throws, so this table does not tell us which policy is better overall. After fixing an inactive-ball collision bug, we tested both policies on 192 new seeds (7300-7491). Earlier cohorts reuse previously tested seeds and are reported separately.</p>
+<details id="methods"><summary>Evaluation protocol and limitations</summary><div class="section-intro"><p>For each policy, the robot starts from the same state and faces the same throw across camera conditions. The controller updates 50 times per second and receives 25 camera images per second. Over each four-second trial, we record whether it dodges, falls, or leaves the area. A successful trial must dodge, stay upright, and stay in the area. Aborted throws remain failures.</p></div><div><h3 class="title is-4">What the results cover</h3><p>We tested two saved policies on one simulated robot. We did not test physical robot safety, human collaboration, or team play, and did not repeat training with different seeds. We knew when the camera interruption began; we did not train a failure detector.</p></div></details><figure class="sensitivity-figure"><img alt="Measured differences in joint success between blank and stale depth across six permitted radii and three evaluation horizons." height="660" loading="lazy" src="assets/radius-horizon-sensitivity.png?v=b20a9ca3f1e8" width="1020"/><figcaption>Task requirements change the score. This post-hoc sensitivity analysis uses the corrected packaged-policy handling cohort; it is separate from the two-checkpoint comparison.</figcaption></figure></div></div>
+</div><div class="columns is-centered">
+<div class="column is-full-width">
+<h2 class="title is-3">Related Links</h2>
+<div class="content has-text-justified"><p>The simulation and training implementation originates from <a href="https://github.com/nepyope/g1_sim_to_real">G1 Depth Dodge</a>, adapting <a href="https://lok-i.github.io/vibe-control/">ViBe/ORCS</a>. Training uses RSL-RL PPO in mjlab/MuJoCo Warp, with frozen <a href="https://github.com/NVlabs/GR00T-WholeBodyControl">SONIC</a> and <a href="https://github.com/bdaiinstitute/theia">Theia</a> bases. The standalone evaluation port uses <a href="https://github.com/huggingface/lerobot">LeRobot G1 assets</a>.</p><p>Our team trained a separate depth adaptation with settings matching the released reference configuration: seed 42, 4,000 updates, and 512 environments. Our run used eight GPUs. Matching settings do not establish identical initialization, random-number sequences, or resume histories; those histories are incomplete. We evaluated camera failures on the two resulting sets of weights. The data package contains configurations and raw trial records; analysis code is in the repository.</p><p>We corrected an inactive-ball collision bug in the upstream deployment port. Collision masks are disabled while the ball is inactive and restored at launch; weights and active-throw physics remain unchanged. Earlier cohorts are corrected exploratory reanalyses; the checkpoint comparison uses 192 new held-out seeds.</p><p>The manuscript is unpublished. The repository contains evaluation and analysis code, configurations, and manuscript source. The four recorded-trial archives are prepared but have not been publicly released. Reference policy weights are available from their original release; the separately trained weights are not distributed. Public end-to-end reproduction is not currently available.</p><p><a href="https://github.com/Hebbian-Robotics/beyond-dodge-rate">Code and reproduction</a></p></div>
+</div>
+</div></div></section><section class="section" id="BibTeX">
+<div class="container is-max-desktop content">
+<h2 class="title">BibTeX</h2>
+<pre><code>@unpublished{kuan2026beyonddodgerate,
+  title = {Beyond Dodge Rate: Testing Humanoid Dodgeball
+           Under Camera Failures},
+  author = {Kuan, Kingston and Ong, Brandon},
+  year = {2026},
+  note = {Unpublished research manuscript, Hebbian Robotics}
+}</code></pre>
+</div>
+</section></main><footer class="footer">
+<div class="container">
+
+<div class="columns is-centered">
+<div class="column is-8">
+<div class="content"><p>Website adapted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies template</a>, licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. <a href="LICENSE.md">Website attribution and licenses</a>.</p><p>The <a href="https://github.com/Hebbian-Robotics/beyond-dodge-rate/blob/main/paper/LICENSE.md">manuscript is CC BY 4.0</a>; original research code is <a href="https://github.com/Hebbian-Robotics/beyond-dodge-rate/blob/main/LICENSE">Apache 2.0</a>.</p></div>
+</div>
+</div>
+</div>
+</footer></body>
+</html>
+

@@ -1,0 +1,26 @@
+[project]
+name = "beyond-dodge-rate"
+version = "0.1.0"
+description = "Evaluation of humanoid dodgeball under camera failures"
+requires-python = ">=3.12,<3.13"
+license = "Apache-2.0"
+dependencies = [
+    "matplotlib>=3.10,<3.11",
+    "mujoco==3.3.7",
+    "numpy==2.2.6",
+    "onnxruntime==1.23.2",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.15.12", "ty>=0.0.35"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "C4", "UP", "ANN", "PTH", "RET", "SIM", "TID", "RUF"]
+ignore = ["E501", "B008", "C901", "RET504", "ANN401"]
+
+[tool.ty.environment]
+python-version = "3.12"

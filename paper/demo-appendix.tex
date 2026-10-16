@@ -1,0 +1,53 @@
+\section{Demo: Camera Failures in Simulated Humanoid Dodgeball}
+\label{app:demo}
+\subsection{What viewers see}
+The demo presents synchronized replays of the experiments in this paper.
+Viewers compare camera conditions, pause at measured events, and follow the
+robot's pelvis relative to the 1\,m boundary. The examples use the first declared
+seeds; aggregate results are reported separately so that an illustrative trial
+is not mistaken for average performance.
+
+The overview video first compares healthy depth with camera freezes at ball
+launch and 320\,ms later. In the illustrated trial, the later freeze allows a
+dodge but the robot subsequently leaves the area. The video then compares
+restoration of fresh images, followed by healthy, stale, and blank images for
+$\pi_2$. The opening slide defines $\pi_1$ and $\pi_2$ and identifies their sources;
+separate tables report the 64-seed fixed recovery test and the 192-seed input
+comparison. These are two sets of learned weights trained with the same method
+and recorded settings, not two proposed training methods.
+
+The recovery replay compares continuously stale images with fresh
+images restored at two or three seconds. All three robots dodge the same throw;
+only the two-second restoration stays within the area in this example. The
+three-second example is labeled exploratory. The
+paper's aggregate recovery results, rather than this single replay, support
+the reported effect.
+
+\subsection{Playback and setup}
+The videos use aligned views and synchronized holds so that the encounter and
+later movement can be compared. An orange marker remains briefly after the
+ball's native removal to make its last recorded position visible. The marker
+is a display aid, not a simulated rebound or continued ball physics.
+
+The demo consists of recorded simulation, rather than live policy execution.
+A laptop with a browser is sufficient for presentation. The presenters bring
+the laptop; a power outlet and an optional external display are useful.
+Downloaded videos play offline. No physical robot, GPU, or special floor area
+is needed. Online playback of the YouTube version requires internet access.
+
+\subsection{Video}
+The overview video is available at \url{https://youtu.be/MG4fqtBPVOY}.
+Synchronized replays are available on the project
+website linked below the paper title.
+
+The results concern two fixed policies in one simulated G1 task. They do not
+establish hardware safety or variation across independent training runs.
+
+\subsection{Code, data and weight availability}
+Evaluation code and configurations are available in the project's public
+repository, linked from the project website. The four recorded-trial archives are prepared but have not been
+publicly released. The released reference weights can be obtained from their
+original source; the separately trained weights are not distributed.
+Recomputing the reported statistics requires the trial archives. Rerunning all
+simulations also requires the simulator assets and both sets of weights.
+Public end-to-end reproduction is therefore not currently available.

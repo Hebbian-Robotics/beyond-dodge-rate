@@ -1,0 +1,50 @@
+\section{Additional Evaluation Details}
+This supplement accompanies \emph{Beyond Dodge Rate: Testing Humanoid Dodgeball
+Under Camera Failures}. The main paper reports the primary recovery test,
+camera-input comparison, shared-throw effects, and their uncertainty. The details
+below describe the exploratory control and recorded-data checks.
+
+\subsection{Shared ball trajectories}
+For trajectory index $i=0,\ldots,63$, donor seed $9000+i$ supplies a healthy-condition
+throw from $\pi_1$ when $i$ is even and $\pi_2$ when $i$ is odd. This selects 32
+trajectories per donor policy without filtering outcomes. Simulation seeds
+10000--10063 replay the pool with both policies and all five camera conditions.
+These are 640 exploratory trials, not newly sampled physical trajectories or
+independent training runs.
+
+At launch, the evaluator retains native collision settings, accounting, and
+random draws, then replaces only the ball's initial position and velocity before
+integration. Exact throw parameters match across all ten policy-condition
+combinations per seed. Robot states can differ between policies. The target
+label describes the donor's original aim, not the receiving robot's body part.
+Twenty preflight trials use two separate simulation seeds. Two additional
+healthy-condition replays of the first control seed reproduce complete trial
+records and verify live ball position and velocity before integration.
+
+\begin{table}[t]
+\caption{Exploratory shared-throw control: the same 64 recorded trajectories
+for both policies. All five conditions are included; falls and aborted throws
+are zero. Recovery resumes fresh images at two seconds. Robot states can differ
+at launch.}
+\label{tab:common}\centering\footnotesize
+\input{generated/common-throw-table.tex}
+\end{table}
+
+\subsection{Trajectory and uncertainty checks}
+Hits resolve at native contact; misses resolve when the simulator ends the throw.
+Resolution is not a closest-approach measurement. Area exits use 50 Hz samples
+without interpolation; a tie with resolution counts as a by-resolution exit.
+The 1 m score fails at the first sampled exit even if the robot later returns.
+For stale-input restoration pairs, launch states, throws, camera schedules, and
+all physical samples before restoration match exactly. Every stale-input throw
+resolves by two seconds within numerical tolerance.
+
+Paired intervals resample complete evaluation seeds with all their conditions.
+The shared-throw input-effect difference retains both policies in each resampled
+seed. Bootstrap runs use 10,000 resamples and seed 20261014. Intervals are nominal
+per comparison, not multiplicity-adjusted. The trial archives retain per-condition
+Wilson intervals, camera schedules, physical traces, outcome flags, and matching
+checks. The original 2,496-trial package includes exploratory cohorts as well as
+the fixed 192-seed input test. Recovery uses a separate 160-trial pilot and a
+640-trial fixed cohort. Exploratory controls and post-hoc scoring analyses are
+not pooled into that fixed estimate.

@@ -1,0 +1,76 @@
+{
+  "total_trials": 2496,
+  "seeds_per_policy": 192,
+  "conditions": [
+    {
+      "policy": "π₁",
+      "input": "Healthy",
+      "dodged": 192,
+      "falls": 0,
+      "in_area": 192,
+      "success": 192
+    },
+    {
+      "policy": "π₁",
+      "input": "Stale",
+      "dodged": 191,
+      "falls": 0,
+      "in_area": 70,
+      "success": 70
+    },
+    {
+      "policy": "π₁",
+      "input": "Blank",
+      "dodged": 182,
+      "falls": 0,
+      "in_area": 181,
+      "success": 171
+    },
+    {
+      "policy": "π₂",
+      "input": "Healthy",
+      "dodged": 162,
+      "falls": 0,
+      "in_area": 189,
+      "success": 161
+    },
+    {
+      "policy": "π₂",
+      "input": "Stale",
+      "dodged": 165,
+      "falls": 0,
+      "in_area": 182,
+      "success": 158
+    },
+    {
+      "policy": "π₂",
+      "input": "Blank",
+      "dodged": 101,
+      "falls": 0,
+      "in_area": 190,
+      "success": 100
+    }
+  ],
+  "blank_minus_stale": [
+    {
+      "policy": "π₁",
+      "difference": 0.5260416666666666,
+      "paired_bootstrap_95": [
+        0.4375,
+        0.609375
+      ],
+      "discordant_positive": 112,
+      "discordant_negative": 11
+    },
+    {
+      "policy": "π₂",
+      "difference": -0.3020833333333333,
+      "paired_bootstrap_95": [
+        -0.3697916666666667,
+        -0.234375
+      ],
+      "discordant_positive": 1,
+      "discordant_negative": 59
+    }
+  ]
+}

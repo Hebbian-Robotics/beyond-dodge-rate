@@ -1,0 +1,33 @@
+{
+  "report_sha256": "a7b73c84cdf9d9fb5321a25b68d66f450ffed970cb02fab4b4c6d95674f12e99",
+  "trial_data_sha256": "6a4da9ef6949c1ab425df2176ffecaf100a138c82160ed5bf96e1fddddc28db8",
+  "scope": "Fixed held-out recovery cohort; restore fresh images at simulation time 2 seconds; success within 1 m over 4 seconds.",
+  "policies": [
+    {
+      "policy": "π₁",
+      "seed_count": 64,
+      "stale_successes": 32,
+      "recovered_successes": 61,
+      "stale_dodges": 64,
+      "recovered_dodges": 64,
+      "difference": 0.453125,
+      "paired_bootstrap_95": [
+        0.328125,
+        0.578125
+      ]
+    },
+    {
+      "policy": "π₂",
+      "seed_count": 64,
+      "stale_successes": 53,
+      "recovered_successes": 51,
+      "stale_dodges": 54,
+      "recovered_dodges": 54,
+      "difference": -0.03125,
+      "paired_bootstrap_95": [
+        -0.078125,
+        0.0
+      ]
+    }
+  ]
+}

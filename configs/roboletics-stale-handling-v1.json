@@ -1,0 +1,70 @@
+{
+  "phase": "roboletics_outage_stale_handling",
+  "seeds": [
+    5000,
+    5001,
+    5002,
+    5003,
+    5004,
+    5005,
+    5006,
+    5007,
+    5008,
+    5009,
+    5010,
+    5011,
+    5012,
+    5013,
+    5014,
+    5015,
+    5016,
+    5017,
+    5018,
+    5019,
+    5020,
+    5021,
+    5022,
+    5023,
+    5024,
+    5025,
+    5026,
+    5027,
+    5028,
+    5029,
+    5030,
+    5031
+  ],
+  "arms": [
+    {
+      "arm": "nominal",
+      "fault": false,
+      "response": "continue",
+      "response_delay_seconds": 0.0
+    },
+    {
+      "arm": "outage_160_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null
+    },
+    {
+      "arm": "zero_160_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0.0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null,
+      "fault_frame_mode": "zero"
+    }
+  ],
+  "episode_seconds": 4.0,
+  "workers": 1,
+  "primary_outcome": "joint_success_10",
+  "analysis_reference": "outage_160_continuous",
+  "claim_scope": "one checkpoint in a deployment port; onset/duration sensitivity; simulation only",
+  "role": "exploratory timed zero-depth handling diagnostic, with idealized known fault",
+  "environment_version": "inactive-ball-collision-corrected-v1",
+  "analysis_status": "exploratory reanalysis of previously seen seeds"
+}
