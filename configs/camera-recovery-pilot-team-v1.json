@@ -1,0 +1,74 @@
+{
+  "phase": "camera_recovery_pilot_v1",
+  "policy": "team",
+  "seeds": [
+    8000,
+    8001,
+    8002,
+    8003,
+    8004,
+    8005,
+    8006,
+    8007,
+    8008,
+    8009,
+    8010,
+    8011,
+    8012,
+    8013,
+    8014,
+    8015
+  ],
+  "arms": [
+    {
+      "arm": "nominal",
+      "fault": false,
+      "response": "continue",
+      "response_delay_seconds": 0
+    },
+    {
+      "arm": "stale_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null,
+      "fault_frame_mode": "freeze"
+    },
+    {
+      "arm": "stale_recover_2000",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.84,
+      "fault_frame_mode": "freeze"
+    },
+    {
+      "arm": "blank_continuous",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": null,
+      "fault_frame_mode": "zero"
+    },
+    {
+      "arm": "blank_recover_2000",
+      "fault": true,
+      "response": "continue",
+      "response_delay_seconds": 0,
+      "fault_onset_offset_seconds": 0.16,
+      "fault_duration_seconds": 0.84,
+      "fault_frame_mode": "zero"
+    }
+  ],
+  "episode_seconds": 4,
+  "workers": 2,
+  "analysis_reference": "stale_continuous",
+  "environment_version": "inactive-ball-collision-corrected-v1",
+  "analysis_status": "outcome-informed exploratory pilot; not independent confirmation",
+  "question": "Does restoring fresh camera frames at two seconds reduce late area exits without changing the preceding failure input?",
+  "primary_outcome": "joint_success_10",
+  "selection_rule": "Execute all sixteen seeds and all five conditions for both saved policies; retain every declared outcome."
+}

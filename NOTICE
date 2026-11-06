@@ -1,0 +1,28 @@
+Beyond Dodge Rate
+Copyright 2026 Hebbian Robotics
+
+Original evaluation and analysis code is distributed under Apache License 2.0.
+The manuscript and its author-created figures are distributed under Creative
+Commons Attribution 4.0 International. See paper/LICENSE.md for the scope and
+attribution information.
+This repository contains research code and scientific visualizations; it does
+not bundle external simulator assets, pretrained model weights or checkpoints.
+
+The experiments build on G1 Depth Dodge by Martino Russi, ViBe/ORCS, SONIC,
+Theia, LeRobot, RSL-RL, mjlab, MuJoCo Warp, MuJoCo and ONNX Runtime.
+Their software, robot assets and pretrained models retain their respective
+licenses. Refer to docs/PROVENANCE.md for source revisions and checkpoint hashes.
+
+The included figures and videos are simulation visualizations, not recordings
+of a physical robot or human participants. External papers are cited in the
+manuscript and their text is not redistributed here.
+
+The website presentation adapts the Nerfies project website, revision
+657409a62d59a93163872c0e4921cf651b987810, under CC BY-SA 4.0.
+See site/LICENSE.md. Bundled Bulma is MIT-licensed; Noto Sans uses the SIL
+Open Font License 1.1. These licenses do not change the manuscript or code license.
+
+The canonical manuscript includes the unmodified IEEEtran.cls
+provided in the RSS paper template. That file is distributed under the LaTeX
+Project Public License 1.3; its original notices and credits are retained.
+See paper/template-manifest.json for its source and integrity hashes.

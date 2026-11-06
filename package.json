@@ -1,0 +1,13 @@
+{
+	"name": "beyond-dodge-rate-site",
+	"private": true,
+	"packageManager": "pnpm@12.3.4",
+	"scripts": {
+		"check": "biome check site package.json biome.json && markdownlint-cli2",
+		"format": "biome format --write site package.json biome.json"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"markdownlint-cli2": "0.18.1"
+	}
+}

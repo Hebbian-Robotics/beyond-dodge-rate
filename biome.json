@@ -1,0 +1,26 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	"vcs": {
+		"enabled": false
+	},
+	"files": {
+		"includes": [
+			"site/**/*.html",
+			"site/**/*.css",
+			"package.json",
+			"biome.json",
+			"!site/static/css/bulma.min.css",
+			"!site/static/css/index.css"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"lineWidth": 100
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"preset": "none"
+		}
+	}
+}
