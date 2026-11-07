@@ -9,6 +9,9 @@ authors:
   - family-names: Chew
     given-names: Samuel J
     affiliation: Carnegie Mellon University
+  - family-names: Aw
+    given-names: Khai Loong
+    affiliation: Stanford University
   - family-names: Ong
     given-names: Brandon
     affiliation: Hebbian Robotics
@@ -24,6 +27,8 @@ preferred-citation:
       given-names: Kingston
     - family-names: Chew
       given-names: Samuel J
+    - family-names: Aw
+      given-names: Khai Loong
     - family-names: Ong
       given-names: Brandon
   year: 2026

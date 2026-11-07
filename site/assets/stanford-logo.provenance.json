@@ -1,0 +1,8 @@
+{
+  "mark": "Stanford University Block S with Tree, full color",
+  "source": "https://identity.stanford.edu/wp-content/uploads/sites/3/2020/07/block-s-right.png",
+  "source_sha256": "2ceebac173ad7d219be7f061661b6d9118efe9080e696b0add9a563e4cfd8294",
+  "guidance": "https://identity.stanford.edu/visual-identity/stanford-logos/",
+  "sha256": "dcb051a5baf87a3c053bae2a649ba22dd7f57e7b697a2571fc7738433a65a140",
+  "scope": "Public PNG from the official Stanford identity site. Only the transparent padding was trimmed; the mark is not recolored, stretched or redrawn."
+}

@@ -112,12 +112,16 @@ def make_intro(path: Path) -> None:
         drawing, (960, 430), "Camera failures in simulated humanoid dodgeball", 46, centered=True
     )
     draw_text(
-        drawing, (960, 600), "Kingston Kuan¹, Samuel J Chew², Brandon Ong¹", 36, centered=True
+        drawing,
+        (960, 600),
+        "Kingston Kuan¹, Samuel J Chew², Khai Loong Aw³, Brandon Ong¹",
+        36,
+        centered=True,
     )
     draw_text(
         drawing,
         (960, 660),
-        "¹Hebbian Robotics   ²Carnegie Mellon University",
+        "¹Hebbian Robotics   ²Carnegie Mellon University   ³Stanford University",
         32,
         color=MUTED,
         centered=True,
@@ -128,7 +132,7 @@ def make_intro(path: Path) -> None:
 
 
 def add_wordmark(image: Image.Image, center: tuple[int, int], width: int) -> None:
-    """Place the Hebbian and Carnegie Mellon wordmarks side by side around the center."""
+    """Place the Hebbian, Carnegie Mellon and Stanford marks side by side around the center."""
     repository = Path(__file__).resolve().parent.parent
     with Image.open(repository / "site/assets/hebbian-wordmark.png") as source:
         wordmark = source.convert("RGBA")
@@ -146,11 +150,23 @@ def add_wordmark(image: Image.Image, center: tuple[int, int], width: int) -> Non
     carnegie_logo = carnegie_logo.resize(
         (carnegie_width, carnegie_height), Image.Resampling.LANCZOS
     )
+    with Image.open(repository / "site/assets/stanford-logo.png") as source:
+        stanford_logo = source.convert("RGBA")
+    # The website shows the Block S 72 px tall beside the 104 px Carnegie Mellon box at its natural aspect ratio.
+    stanford_height = round(width * 72 / 180)
+    stanford_width = round(stanford_logo.width * stanford_height / stanford_logo.height)
+    stanford_logo = stanford_logo.resize(
+        (stanford_width, stanford_height), Image.Resampling.LANCZOS
+    )
     gap = round(width * 32 / 180)
-    left = center[0] - (width + gap + carnegie_width) // 2
+    left = center[0] - (width + gap + carnegie_width + gap + stanford_width) // 2
     image.paste(wordmark, (left, center[1] - height // 2), wordmark)
+    carnegie_left = left + width + gap
+    image.paste(carnegie_logo, (carnegie_left, center[1] - carnegie_height // 2), carnegie_logo)
     image.paste(
-        carnegie_logo, (left + width + gap, center[1] - carnegie_height // 2), carnegie_logo
+        stanford_logo,
+        (carnegie_left + carnegie_width + gap, center[1] - stanford_height // 2),
+        stanford_logo,
     )
 
 
@@ -160,12 +176,16 @@ def make_outro(path: Path) -> None:
     draw_text(drawing, (960, 250), "Beyond Dodge Rate", 80, bold=True, centered=True)
     draw_text(drawing, (960, 410), "Evaluate what happens after the dodge.", 46, centered=True)
     draw_text(
-        drawing, (960, 540), "Kingston Kuan¹, Samuel J Chew², Brandon Ong¹", 34, centered=True
+        drawing,
+        (960, 540),
+        "Kingston Kuan¹, Samuel J Chew², Khai Loong Aw³, Brandon Ong¹",
+        34,
+        centered=True,
     )
     draw_text(
         drawing,
         (960, 600),
-        "¹Hebbian Robotics   ²Carnegie Mellon University",
+        "¹Hebbian Robotics   ²Carnegie Mellon University   ³Stanford University",
         30,
         color=MUTED,
         centered=True,

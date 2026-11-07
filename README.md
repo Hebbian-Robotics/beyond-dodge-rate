@@ -2,13 +2,13 @@
 
 Testing Humanoid Dodgeball Under Camera Failures
 
-Kingston Kuan¹, Samuel J Chew², Brandon Ong¹ · ¹Hebbian Robotics · ²Carnegie Mellon University
+Kingston Kuan¹, Samuel J Chew², Khai Loong Aw³, Brandon Ong¹ · ¹Hebbian Robotics · ²Carnegie Mellon University · ³Stanford University
 
 Accepted at [CoRL 2026 Workshop on RoboLetics](https://roboletics.github.io/corl2026/).
 
 [Project page](https://hebbian-robotics.github.io/beyond-dodge-rate/) ·
 [Paper](paper/paper.pdf) · [Supplement](paper/supplement.pdf) ·
-[Video](https://youtu.be/w0CTj4a3SYs) ·
+[Video](https://youtu.be/iXgu4AaxdYE) ·
 [Model](https://huggingface.co/hebbianrobotics/g1-depth-dodge) ·
 [Data](https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate) ·
 [Reproduction](docs/REPRODUCIBILITY.md)
@@ -42,9 +42,8 @@ objective, and recorded settings. These labels identify fixed checkpoints.
 The experiments compare camera interventions within each policy, rather than
 ranking the policies. Their complete training histories are not available.
 
-This repository accompanies a workshop paper. The recorded trial
-data and the separately trained π₂ weights are on Hugging Face; see
-[availability](docs/AVAILABILITY.md). For definitions and protocols, start with
+The recorded trial data and the separately trained π₂ weights are on Hugging Face;
+see [availability](docs/AVAILABILITY.md). For definitions and protocols, start with
 the [documentation index](docs/README.md).
 
 ## Quick start
@@ -71,9 +70,9 @@ pelvis path. These exact replays illustrate the failure; they are not averages.*
 
 ## Video
 
-[![Overview of the simulated camera-failure experiments, with policy descriptions and aggregate results.](site/assets/demo-hero-poster.png)](https://youtu.be/w0CTj4a3SYs)
+[![Overview of the simulated camera-failure experiments, with policy descriptions and aggregate results.](site/assets/demo-hero-poster.png)](https://youtu.be/iXgu4AaxdYE)
 
-[Watch the 80-second overview on YouTube](https://youtu.be/w0CTj4a3SYs).
+[Watch the 80-second overview on YouTube](https://youtu.be/iXgu4AaxdYE).
 The captioned video compares
 camera-failure timing, restoration of fresh images, and stale versus blank
 depth. Separate tables report the measured results for both saved policies. Click the preview to open the video.

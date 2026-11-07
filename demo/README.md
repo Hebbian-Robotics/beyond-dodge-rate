@@ -2,7 +2,7 @@
 
 Camera Failures in Simulated Humanoid Dodgeball
 
-Kingston Kuan, Samuel J Chew and Brandon Ong · Hebbian Robotics and Carnegie Mellon University
+Kingston Kuan, Samuel J Chew, Khai Loong Aw and Brandon Ong · Hebbian Robotics, Carnegie Mellon University and Stanford University
 
 The demo shows why avoiding a ball is only one part of a successful dodge.
 Viewers compare synchronized simulation replays, pause at measured contact
@@ -48,7 +48,7 @@ presenters bring the laptop.
 
 - [Supplement](../paper/supplement.pdf): additional methods and demo description.
 - [Demo source](../paper/demo-appendix.tex): presentation setup and video link.
-- [YouTube video](https://youtu.be/w0CTj4a3SYs): captioned simulation comparisons.
+- [YouTube video](https://youtu.be/iXgu4AaxdYE): captioned simulation comparisons.
 
 ## Rebuild
 

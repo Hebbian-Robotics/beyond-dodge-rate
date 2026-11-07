@@ -2,7 +2,7 @@
 
 Beyond Dodge Rate: Testing Humanoid Dodgeball Under Camera Failures
 
-Kingston Kuan, Samuel J Chew and Brandon Ong · Hebbian Robotics and Carnegie Mellon University
+Kingston Kuan, Samuel J Chew, Khai Loong Aw and Brandon Ong · Hebbian Robotics, Carnegie Mellon University and Stanford University
 
 The manuscript source, manuscript PDFs, and author-created figures included in
 the manuscript are licensed under the

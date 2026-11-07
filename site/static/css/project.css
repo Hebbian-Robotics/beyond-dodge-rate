@@ -97,6 +97,12 @@ summary {
 	height: 104px;
 	object-fit: cover;
 }
+.stanford-logo {
+	display: block;
+	width: auto;
+	max-width: 100%;
+	height: 72px;
+}
 .affiliation-note {
 	margin: 0 auto 1.5rem;
 	padding: 0 1rem;
