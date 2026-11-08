@@ -1,50 +1,273 @@
-\section{Additional Evaluation Details}
+\section{Evaluation Protocol}
+\label{app:protocol}
 This supplement accompanies \emph{Beyond Dodge Rate: Testing Humanoid Dodgeball
-Under Camera Failures}. The main paper reports the primary recovery test,
-camera-input comparison, shared-throw effects, and their uncertainty. The details
-below describe the exploratory control and recorded-data checks.
+Under Camera Failures}. Section A gives reproducibility details, Section B
+reports supporting results, and Section C describes the demo and releases.
 
-\subsection{Shared ball trajectories}
-For trajectory index $i=0,\ldots,63$, donor seed $9000+i$ supplies a healthy-condition
-throw from $\pi_1$ when $i$ is even and $\pi_2$ when $i$ is odd. This selects 32
-trajectories per donor policy without filtering outcomes. Simulation seeds
-10000--10063 replay the pool with both policies and all five camera conditions.
-These are 640 exploratory trials, not newly sampled physical trajectories or
-independent training runs.
+\subsection{Policies, simulator, and task}
+The controller combines frozen SONIC and Theia bases with depth adaptation
+trained by PPO through RSL-RL in mjlab/MuJoCo Warp, using the sources cited in
+the main paper. $\pi_1$ is the released iteration-4000 model. The saved
+configuration for $\pi_2$ matches the released reference: training seed 42,
+4,000 updates, 512 environments, and about 49.15 million transitions,
+distributed across eight GPUs in our run. The weights differ. Initialization,
+random-number sequences, and resume histories are incomplete, so these are
+not a controlled comparison of training methods or independent training
+replications with fully controlled histories.
 
-At launch, the evaluator retains native collision settings, accounting, and
-random draws, then replaces only the ball's initial position and velocity before
-integration. Exact throw parameters match across all ten policy-condition
-combinations per seed. Robot states can differ between policies. The target
-label describes the donor's original aim, not the receiving robot's body part.
-Twenty preflight trials use two separate simulation seeds. Two additional
-healthy-condition replays of the first control seed reproduce complete trial
-records and verify live ball position and velocity before integration.
+Evaluation fixes weights, native gains, torque limits, depth noise,
+active-ball collisions, and fall checks. MuJoCo 3.3.7 and ONNX Runtime 1.23.2
+run on CPU, with 50 Hz control and 25 Hz depth frames. All trials correct the
+inactive-ball bug by disabling collisions while the ball is parked below the
+floor and restoring them at launch.
 
+The ball launches at 1 s. The native generator aims at one of six body
+locations, adds random position offsets and $\pm30^\circ$ direction variation,
+and uses a nominal flight time of 0.55--0.62 s. Trials end at 4 s or on a fall.
+The allowed area is a circle of radius 1 m centred on the pelvis starting
+position. A fall occurs when pelvis height is below 0.45 m or upright-axis
+cosine is below 0.4 (about $66.4^\circ$ tilt).
+
+\subsection{Cohorts and fixed comparisons}
+The input-handling experiment fixes 192 seeds (7300--7491) per policy before
+observing outcomes. Each seed runs healthy input, continuous stale input, and
+continuous blank input: 1,152 trials across both policies. Fault onset is
+160 ms after launch (1.16 s), and faults last until trial end.
+
+The original fresh-image restoration experiment uses a separate exploratory
+16-seed pilot per policy (8000--8015), then 64 new seeds (9000--9063). Each seed
+runs five conditions: healthy input, continuous stale input, continuous blank
+input, stale input followed by fresh-image restoration at 2 s, and blank input
+followed by restoration at 2 s. Faults begin at 1.16 s (160 ms after launch).
+This gives 160 pilot and 640 original restoration trials. After the pilot,
+we fixed the new seeds and the primary contrast:
+restoration versus continuous stale input for $\pi_1$. The other policy and
+blank-input contrasts are secondary. Pilot outcomes are excluded.
+
+Restoration follows a fixed schedule rather than being triggered by throw
+resolution. All conditions retain the four-second horizon, subject to the
+native fall termination rule, without further outcome-dependent stopping.
+Histories are not reset. All stale-input throws resolve by restoration within
+numerical tolerance. The original 2,496-trial package also includes exploratory
+cohorts beyond the 192-seed input-handling experiment. Exploratory controls and
+post-hoc scoring analyses are not pooled into the original restoration estimate.
+
+\subsection{Matching and shared ball launches}
+Within each policy and seed, prelaunch robot positions and velocities, launch
+time, target, ball position and velocity, and flight time must match across
+camera conditions. Camera schedules are checked. Missing or mismatched trials
+halt analysis. Restoration pairs also have identical recorded physical samples
+before 2 s. Different robot motion before launch can change the simulator's
+aim, so equal seeds need not yield equal throws across policies. Comparisons
+concern camera inputs within each policy rather than a policy ranking.
+
+The shared-throw control tests whether responses persist under matched ball
+launches. For index $i=0,\ldots,63$, donor seed $9000+i$ supplies a healthy-input
+throw from $\pi_1$ when $i$ is even and $\pi_2$ when $i$ is odd. This selects
+32 launches per policy without filtering outcomes. Simulation seeds
+10000--10063 apply each launch to both policies under all five restoration
+conditions, with the same 1.16 s fault onset and 2 s restoration schedule,
+giving 640 trials. Twenty separate preflight trials use two other
+simulation seeds and are retained in the shared-throw archive.
+
+At launch, the evaluator retains native collision settings, outcome accounting,
+and random draws, then replaces only the ball's initial position and velocity
+before integration. Exact throw parameters match across all ten
+policy-condition combinations per seed. Robot states can still differ. The
+target label describes the donor's original aim, not the receiving robot's body
+part. Subsequent ball trajectories are simulated, not imposed. This control
+reuses recorded launch conditions and adds no independent training runs.
+
+\subsection{Scoring, timing, and uncertainty}
+Task success requires a dodge, no fall, and area compliance throughout the
+trial. A dodge is a simulator-recorded miss. Trials ending before throw
+resolution (aborted throws) count as failures and remain in the denominator.
+Area compliance fails at the first sampled exit, even if the robot returns.
+The area criterion measures pelvis containment, not whole-body containment or
+damage, and is neither a court rule nor an injury threshold.
+
+The post-hoc timing analysis reuses all 1,152 input-handling trials without
+changing seeds or outcome labels. A hit resolves at native contact. A miss
+resolves at the first 20 ms control step at least one second after launch if
+the ball remains active after contact processing and the fall check. Resolution
+is a scoring event, not a measurement of closest approach. An area exit is late
+only if it occurs strictly after resolution; ties count as at-or-before
+resolution. Area exits use 50 Hz samples without interpolation.
+
+Paired 95\% confidence intervals use 10,000 bootstrap resamples of whole
+evaluation seeds, retaining their conditions together. Shared-throw comparisons
+retain both policies in each resampled seed. The input-handling, original
+restoration, shared-throw input-effect, and stale-to-blank analyses use random
+seed 20261014. The area-radius/duration analysis uses 20261015, and its
+continuous-distance analysis uses 20261016. Intervals are nominal per comparison,
+without multiplicity adjustment. Individual-condition intervals are Wilson
+intervals. Evaluation seeds are not independent training replications.
+
+The trial archives retain configurations, camera schedules, physical traces,
+and outcome flags. Analysis code computes intervals and validates matching
+from these records. These records do not by themselves imply identical replay
+across different execution environments.
+
+\subsection{Controller and station reward}
+Each 25 Hz depth frame is encoded by Theia. A perception module aggregates
+16 recent visual tokens into a feature. At 50 Hz, the actor combines this
+feature with a standing reference and ten samples each of gyroscope readings,
+joint-position offsets from the default pose, joint velocities, previous
+actions, and projected gravity. The standing reference includes default joint
+positions, zero joint velocities, and orientation relative to the reference.
+The 29 normalized outputs specify joint targets through native scaling,
+PD gains, and torque limits.
+
+Fault injection replaces depth values before preprocessing and Theia encoding.
+Visual and proprioceptive histories keep updating through switches. Old visual
+tokens remain until newer tokens replace them. Blank input supplies zero-valued
+depth frames at the native camera rate. Fresh-image restoration resumes the
+native noisy camera stream.
+
+The pinned training environment inherits the station term
+\begin{equation}
+r_{\rm station}=\exp\!\left(-\frac{\|\mathbf p_{\rm ref}
+-\mathbf p_{\rm robot}\|_2^2}{\sigma^2}\right).
+\end{equation}
+The weight is $w=0.3$ and the scale is $\sigma=1$ m. The positions are the
+reference and robot anchor positions in world coordinates, including height.
+The reward manager applies the weight and its time-step scaling. The term is
+\texttt{motion\_global\_anchor\_position\_error\_exp} in
+\href{https://github.com/mujocolab/mjlab/blob/v1.4.0/src/mjlab/tasks/tracking/mdp/rewards.py}{mjlab 1.4.0}.
+The environment also rewards ball clearance and penalizes action changes and
+joint-limit violations. The depth-adaptation wrapper adds hit and fall
+penalties. The horizontal, trial-wide area criterion is additional to this
+smooth reward. Its 1 m scale supplies no task-level justification for a hard
+area radius. Training hyperparameters were fixed, so their sensitivity is
+outside these tests.
+
+\section{Detailed Results}
+\label{app:results}
+\subsection{Input handling and late area exits}
+Blank versus stale input raises $\pi_1$ success from 70/192 to 171/192
+(+52.6 percentage points; paired 95\% confidence interval +43.8 to +60.9).
+For $\pi_2$, success falls from 158/192 to 100/192 ($-$30.2 percentage points;
+confidence interval $-$37.0 to $-$23.4). For $\pi_1$, area compliance rises
+from 70/192 to 181/192 while dodges fall from 191/192 to 182/192. For $\pi_2$,
+area compliance rises from 182/192 to 190/192 while dodges fall from 165/192 to
+101/192. There are no falls. All conditions, including healthy input, are
+reported in main-paper Table III.
+
+Under stale input, all 122 $\pi_1$ area exits occur after throw resolution;
+121 follow a dodge. Its 11 exits under blank input are also late. For $\pi_2$,
+stale input produces seven exits at or before resolution and three afterward.
+Its two exits under blank input are late. These timings describe when
+area-compliance failures occur; they do not explain the learned policies.
+
+\subsection{Original fresh-image restoration experiment}
+For $\pi_1$, restoration versus continuous stale input changes success from
+32/64 to 61/64 (+45.3 percentage points; paired 95\% confidence interval
++32.8 to +57.8). There are 29 trials changing from failure to success and none
+changing from success to failure. For $\pi_2$, success changes from 53/64 to
+51/64 ($-$3.1 percentage points; confidence interval $-$7.8 to 0), with no
+trials changing from failure to success and two changing from success to
+failure. Both $\pi_1$ conditions dodge 64/64 throws, and both $\pi_2$ conditions
+dodge 54/64. All five conditions have zero falls and aborted throws.
+Main-paper Table II gives all counts, including the smaller or absent effects
+of restoration after blank input. These results concern area compliance after
+the encounter and establish neither a neural mechanism nor a universal fallback.
+
+\subsection{Area radius, duration, and continuous distance}
+Post-hoc analyses use area radii 0.5, 0.75, 1.0, 1.25, 1.5, and 2.0 m and
+observation durations 2.0, 2.5, 3.0, and 4.0 s in the original restoration and
+shared-throw cohorts. Increases in success rate emerge mainly late and shrink
+with larger area radii. At four seconds, increasing the radius from 1 to 1.5 m
+reduces the additional successful $\pi_1$ trials from 29/64 to 2/64 in the
+original cohort and from 37/64 to 1/64 in the shared-throw control.
+
+Pelvis distance is horizontal distance from its starting position. Maximum
+pelvis distance is its largest value during the trial; final pelvis distance
+is its value at trial end. These summaries include all 64 seeds per policy in
+each cohort, including hits, and reuse recorded trials. They do not apply an
+area criterion.
+
+For $\pi_1$, restoration reduces mean maximum pelvis distance from 1.043 to
+0.860 m (paired difference $-$0.184 m; 95\% confidence interval $-$0.226 to
+$-$0.146 m). The corresponding shared-throw difference is $-$0.179 m.
+Mean final pelvis distance changes by $-$0.608 m in the original cohort and
+$-$0.581 m in the shared-throw cohort.
+
+For $\pi_2$, the mean maximum pelvis distance changes by $+0.010$ m in the
+original cohort (paired 95\% confidence interval $+0.005$ to $+0.018$ m) and
+$-0.002$ m under shared throws (interval $-0.019$ to $+0.012$ m). The latter
+interval spans zero. Mean final pelvis distance changes by $-0.070$ and
+$-0.060$ m, respectively. Thus, final distance can decrease without a
+corresponding decrease in maximum distance.
+
+\subsection{Shared-throw control}
 \begin{table}[t]
-\caption{Exploratory shared-throw control: the same 64 recorded trajectories
-for both policies. All five conditions are included; falls and aborted throws
-are zero. Recovery resumes fresh images at two seconds. Robot states can differ
-at launch.}
+\caption{Shared-throw control. Counts out of 64 per condition; falls and aborted
+throws are zero. Fresh-image restoration occurs at 2 s. Initial ball positions
+and velocities match across policies; robot states can differ.}
 \label{tab:common}\centering\footnotesize
 \input{generated/common-throw-table.tex}
 \end{table}
+Blank versus stale input changes success by +46.9 percentage points for
+$\pi_1$ (paired 95\% confidence interval +31.2 to +62.5) and $-$10.9 for
+$\pi_2$ (interval $-$21.9 to 0). The between-policy difference is +57.8
+percentage points (interval +40.6 to +75.0). The $\pi_2$ interval reaches zero,
+so this control alone does not establish a harmful blank-input effect for
+that policy.
 
-\subsection{Trajectory and uncertainty checks}
-Hits resolve at native contact; misses resolve when the simulator ends the throw.
-Resolution is not a closest-approach measurement. Area exits use 50 Hz samples
-without interpolation; a tie with resolution counts as a by-resolution exit.
-The 1 m score fails at the first sampled exit even if the robot later returns.
-For stale-input restoration pairs, launch states, throws, camera schedules, and
-all physical samples before restoration match exactly. Every stale-input throw
-resolves by two seconds within numerical tolerance.
+Fresh-image restoration raises $\pi_1$ success from 23/64 to 60/64, with 60/64
+dodges in both conditions. For $\pi_2$, success changes from 46/64 to 45/64,
+with 52/64 dodges in both. No falls or aborted throws occur. These response
+differences persist under matched ball launches, although robot states, weights,
+and incompletely documented training histories can differ.
 
-Paired intervals resample complete evaluation seeds with all their conditions.
-The shared-throw input-effect difference retains both policies in each resampled
-seed. Bootstrap runs use 10,000 resamples and seed 20261014. Intervals are nominal
-per comparison, not multiplicity-adjusted. The trial archives retain per-condition
-Wilson intervals, camera schedules, physical traces, outcome flags, and matching
-checks. The original 2,496-trial package includes exploratory cohorts as well as
-the fixed 192-seed input test. Recovery uses a separate 160-trial pilot and a
-640-trial fixed cohort. Exploratory controls and post-hoc scoring analyses are
-not pooled into that fixed estimate.
+\subsection{Stale-to-blank control}
+The control reruns seeds 9000--9063 for both policies in three conditions,
+giving 384 trials. All conditions receive fresh frames before 1.16 s, then
+repeat the last pre-fault frame. At the fixed 2 s switch, they continue stale
+input, supply blank input, or resume fresh frames. Histories keep updating.
+All 128 triplets pass launch-state, throw-record, supplied-frame hash checks
+before 2 s, and recorded pelvis-trace checks through 2 s. Native camera frames
+at the switch also match before substitution. All throws resolve by the switch
+within numerical tolerance. Every condition retains every seed through the
+four-second horizon.
+
+\begin{table*}[t]
+\caption{Stale-to-blank control. Counts out of 64; falls and aborted throws are
+zero. Mean maximum and final pelvis distances are in metres and include every
+trial, including hits. All trials reach four seconds.}
+\label{tab:switch}\centering\small
+\input{generated/switch-table.tex}
+\end{table*}
+For $\pi_1$, success is 31/64 with continued stale input, 62/64 with blank input,
+and 62/64 with fresh frames. The two switches change the same 31 trials from
+failure to success, with none worsening. Each success-rate increase is
+$31/64=48.4$ percentage points (paired 95\% confidence interval 35.9--60.9).
+For $\pi_2$, all three conditions succeed on the same 54/64 trials. All $\pi_1$
+trials dodge; each $\pi_2$ condition dodges 55/64. No falls or aborted throws
+occur.
+
+Fresh-image restoration versus blank input yields zero discordant success
+pairs in 64 trials per policy. Under independent evaluation-seed sampling,
+the one-sided exact 95\% upper bound on discordance probability $p$ follows
+from $(1-p)^{64}=0.05$, giving $p\leq1-0.05^{1/64}=0.0457$, or 4.6\% rounded.
+These are separate per-policy bounds. The empirical paired bootstrap has zero
+width for these identical binary outcomes, so it cannot establish a population
+equivalence margin.
+
+Fresh frames reduce mean final pelvis distance relative to blank input by
+0.295 m for $\pi_1$ (paired 95\% confidence interval 0.253--0.341 m) and
+0.117 m for $\pi_2$ (0.091--0.144 m). The fresh-minus-blank difference in mean
+maximum pelvis distance is $+0.0015$ m for $\pi_1$ (interval $-0.0008$ to
+$+0.0039$ m) and $-0.0046$ m for $\pi_2$ ($-0.0124$ to $+0.0040$ m).
+Blank input with retained history reproduces the observed success outcomes,
+while fresh frames produce smaller mean final distances.
+
+The simulator, robot, and weight files match the frozen runtime manifests.
+The local rerun uses Python 3.12.3, NumPy 2.2.6, MuJoCo 3.3.7, ONNX Runtime
+1.23.2 CPU inference with one thread per session, and an Intel Core Ultra
+9 275HX. Trajectories differ from the published archives: continued-stale/fresh
+success changes from archived 32/61 to local 31/62 for $\pi_1$, and from 53/51
+to 54/54 for $\pi_2$, all out of 64. Every reported switch comparison uses the
+local triplets. The cause of the cross-runtime differences remains unresolved.
+This exploratory control reuses the original restoration seed IDs and is
+analysed separately.

@@ -122,7 +122,7 @@ def generate_figure(
     datasets: dict[str, Path], summaries: dict[str, dict[str, Any]], destination: Path
 ) -> None:
     """Show every held-out seed, without selecting an illustrative trajectory."""
-    figure, axes = plt.subplots(2, 2, figsize=(10.8, 7.2))
+    figure, axes = plt.subplots(2, 2, figsize=(10.8, 4.4))
     colors = ["#777777", "#c66a12", "#1671a9", "#8b609d", "#357e55"]
     for column, (policy, directory) in enumerate(datasets.items()):
         summary = summaries[policy]

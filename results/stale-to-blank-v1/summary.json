@@ -1,0 +1,416 @@
+{
+  "design": "Three local arms per seed, seeds 9000-9063. Exploratory extension on reused seed IDs. Archived trials are separate.",
+  "statistics": "Rates use all 64 seeds per policy. Contrasts are paired mean differences; nominal percentile intervals from 10,000 whole-seed bootstrap draws with RNG seed 20261014.",
+  "archived_recovery_sha256": "6a4da9ef6949c1ab425df2176ffecaf100a138c82160ed5bf96e1fddddc28db8",
+  "runtime_scope": "Published controls have different physical traces. All paired effects use only the three arms rerun on the same local runtime. Joint success requires a dodge, no fall and containment within 1 m throughout the four-second trial.",
+  "policies": {
+    "upstream": {
+      "execution": {
+        "trials": 192,
+        "retained_before_resume": 144,
+        "completed_after_resume": 48,
+        "resume_wall_seconds": 100.12790588100324,
+        "input_sha256": "61dbce0ab1fdd2517a48dba0c0511497da3abe9846c1386b1e50b125107478e8",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "numpy": "2.2.6",
+        "onnxruntime": "1.23.2",
+        "mujoco": "3.3.7",
+        "benchmark_equivalent": false
+      },
+      "verified_triplets": 64,
+      "conditions": {
+        "stale_continuous": {
+          "dodge": 64,
+          "hit": 0,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 31,
+          "success": 31,
+          "max_radius_m": 1.0404198977666974,
+          "final_radius_m": 1.0199042988377713
+        },
+        "stale_blank_2000": {
+          "dodge": 64,
+          "hit": 0,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 62,
+          "success": 62,
+          "max_radius_m": 0.8548749809955974,
+          "final_radius_m": 0.7240450980053983
+        },
+        "stale_recover_2000": {
+          "dodge": 64,
+          "hit": 0,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 62,
+          "success": 62,
+          "max_radius_m": 0.856328342186977,
+          "final_radius_m": 0.42855567383647597
+        }
+      },
+      "contrasts": {
+        "stale_blank_2000_minus_stale_continuous": {
+          "success": {
+            "difference": 0.484375,
+            "paired_95": [
+              0.359375,
+              0.609375
+            ],
+            "positive_pairs": 31,
+            "negative_pairs": 0
+          },
+          "contained": {
+            "difference": 0.484375,
+            "paired_95": [
+              0.359375,
+              0.609375
+            ],
+            "positive_pairs": 31,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": -0.18554491677110002,
+            "paired_95": [
+              -0.23107390090624097,
+              -0.14450401854849437
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 62
+          },
+          "final_radius_m": {
+            "difference": -0.29585920083237327,
+            "paired_95": [
+              -0.33804945160702304,
+              -0.25782140090366407
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 64
+          }
+        },
+        "stale_recover_2000_minus_stale_continuous": {
+          "success": {
+            "difference": 0.484375,
+            "paired_95": [
+              0.359375,
+              0.609375
+            ],
+            "positive_pairs": 31,
+            "negative_pairs": 0
+          },
+          "contained": {
+            "difference": 0.484375,
+            "paired_95": [
+              0.359375,
+              0.609375
+            ],
+            "positive_pairs": 31,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": -0.18409155557972054,
+            "paired_95": [
+              -0.22979860930138277,
+              -0.1432257591968924
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 62
+          },
+          "final_radius_m": {
+            "difference": -0.5913486250012956,
+            "paired_95": [
+              -0.6594409598092991,
+              -0.53236265154054
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 64
+          }
+        },
+        "stale_recover_2000_minus_stale_blank_2000": {
+          "success": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0,
+            "discordance_exact_upper_95": 0.045729702330762456
+          },
+          "contained": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": 0.0014533611913794924,
+            "paired_95": [
+              -0.0007610726131822025,
+              0.003910418415648216
+            ],
+            "positive_pairs": 46,
+            "negative_pairs": 4
+          },
+          "final_radius_m": {
+            "difference": -0.2954894241689223,
+            "paired_95": [
+              -0.3405636709714938,
+              -0.252740210160774
+            ],
+            "positive_pairs": 1,
+            "negative_pairs": 63
+          }
+        }
+      },
+      "archived_controls": {
+        "stale_continuous": {
+          "success": 32,
+          "dodge": 64,
+          "identical_traces": 0
+        },
+        "stale_recover_2000": {
+          "success": 61,
+          "dodge": 64,
+          "identical_traces": 0
+        }
+      }
+    },
+    "team": {
+      "execution": {
+        "trials": 192,
+        "retained_before_resume": 140,
+        "completed_after_resume": 52,
+        "resume_wall_seconds": 111.14098161799484,
+        "input_sha256": "681eff08e265bec39c1eafbf4c1e3f0b6d490530a229065381d9ca6dc9da391b",
+        "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+        "numpy": "2.2.6",
+        "onnxruntime": "1.23.2",
+        "mujoco": "3.3.7",
+        "benchmark_equivalent": false
+      },
+      "verified_triplets": 64,
+      "conditions": {
+        "stale_continuous": {
+          "dodge": 55,
+          "hit": 9,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 59,
+          "success": 54,
+          "max_radius_m": 0.7132879986556796,
+          "final_radius_m": 0.5847102281129919
+        },
+        "stale_blank_2000": {
+          "dodge": 55,
+          "hit": 9,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 59,
+          "success": 54,
+          "max_radius_m": 0.7256245707773762,
+          "final_radius_m": 0.6515950441845936
+        },
+        "stale_recover_2000": {
+          "dodge": 55,
+          "hit": 9,
+          "fall": 0,
+          "aborted": 0,
+          "contained": 59,
+          "success": 54,
+          "max_radius_m": 0.7210330745756186,
+          "final_radius_m": 0.5342503737267588
+        }
+      },
+      "contrasts": {
+        "stale_blank_2000_minus_stale_continuous": {
+          "success": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0,
+            "discordance_exact_upper_95": 0.045729702330762456
+          },
+          "contained": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": 0.012336572121696632,
+            "paired_95": [
+              0.005439171959479022,
+              0.02004960352629898
+            ],
+            "positive_pairs": 20,
+            "negative_pairs": 19
+          },
+          "final_radius_m": {
+            "difference": 0.0668848160716016,
+            "paired_95": [
+              0.03128505053461693,
+              0.10214881632686429
+            ],
+            "positive_pairs": 47,
+            "negative_pairs": 17
+          }
+        },
+        "stale_recover_2000_minus_stale_continuous": {
+          "success": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0,
+            "discordance_exact_upper_95": 0.045729702330762456
+          },
+          "contained": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": 0.007745075919939037,
+            "paired_95": [
+              0.002683613313110724,
+              0.013885160954928632
+            ],
+            "positive_pairs": 19,
+            "negative_pairs": 20
+          },
+          "final_radius_m": {
+            "difference": -0.05045985438623309,
+            "paired_95": [
+              -0.08380142802503013,
+              -0.016634984007414852
+            ],
+            "positive_pairs": 22,
+            "negative_pairs": 42
+          }
+        },
+        "stale_recover_2000_minus_stale_blank_2000": {
+          "success": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0,
+            "discordance_exact_upper_95": 0.045729702330762456
+          },
+          "contained": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "dodge": {
+            "difference": 0.0,
+            "paired_95": [
+              0.0,
+              0.0
+            ],
+            "positive_pairs": 0,
+            "negative_pairs": 0
+          },
+          "max_radius_m": {
+            "difference": -0.004591496201757596,
+            "paired_95": [
+              -0.012436028965658498,
+              0.0039771614120508465
+            ],
+            "positive_pairs": 23,
+            "negative_pairs": 18
+          },
+          "final_radius_m": {
+            "difference": -0.1173446704578347,
+            "paired_95": [
+              -0.1440143590375819,
+              -0.09059334505485209
+            ],
+            "positive_pairs": 6,
+            "negative_pairs": 58
+          }
+        }
+      },
+      "archived_controls": {
+        "stale_continuous": {
+          "success": 53,
+          "dodge": 54,
+          "identical_traces": 0
+        },
+        "stale_recover_2000": {
+          "success": 51,
+          "dodge": 54,
+          "identical_traces": 0
+        }
+      }
+    }
+  }
+}

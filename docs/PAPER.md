@@ -5,7 +5,8 @@ anonymous exports share this source and contain at most four main-content pages,
 followed by references. The appendix is a separate supplementary PDF.
 
 Run the complete analysis and paper build in
-[Reproducibility](REPRODUCIBILITY.md). To rebuild the PDFs from an existing
+[Reproducibility](REPRODUCIBILITY.md), including the separate
+stale-to-blank control. To rebuild the PDFs from an existing
 verified analysis directory:
 
 ```sh
@@ -22,7 +23,8 @@ whose references begin after page five.
 
 - `paper.pdf`: named main paper, including references.
 - `paper-anonymous.pdf`: the same research without author identification or external links.
-- `supplement.pdf`: additional methods, the full shared-throw table, and the demo description.
+- `supplement.pdf`: additional methods, the shared-throw and stale-to-blank tables,
+  the demo description, and reproduction instructions.
 
 `paper/supplement-main.tex` combines `extended-methods.tex` and
 `demo-appendix.tex`. Submit the main paper in the PDF field and the supplement

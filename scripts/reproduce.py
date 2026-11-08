@@ -5,8 +5,10 @@ from __future__ import annotations
 import argparse
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
+from analyze_later_recovery import unpack_verified_archive
 from evaluate import file_digest, write_json
 
 
@@ -23,6 +25,9 @@ def main() -> None:
     parser.add_argument("--tectonic", help="Optional Tectonic executable")
     parser.add_argument(
         "--later-data", type=Path, required=True, help="128-trial later-restoration archive"
+    )
+    parser.add_argument(
+        "--switch-data", type=Path, required=True, help="384-trial stale-to-blank control archive"
     )
     arguments = parser.parse_args()
     repository = Path(__file__).resolve().parent.parent
@@ -70,6 +75,26 @@ def main() -> None:
         ],
         check=True,
     )
+    with tempfile.TemporaryDirectory(prefix="paper-switch-control-") as temporary:
+        switch_directory = Path(temporary)
+        switch_digest = unpack_verified_archive(
+            arguments.switch_data,
+            repository / "data/stale-to-blank-manifest.json",
+            switch_directory,
+        )
+        subprocess.run(
+            [
+                sys.executable,
+                str(repository / "scripts/analyze_stale_to_blank.py"),
+                "--trials",
+                str(switch_directory),
+                "--recovery-data",
+                str(arguments.recovery_data.resolve()),
+                "--output",
+                str((arguments.output / "stale-to-blank").resolve()),
+            ],
+            check=True,
+        )
     write_json(
         arguments.output / "verification.json",
         {
@@ -77,6 +102,8 @@ def main() -> None:
             "recovery_data_sha256": file_digest(arguments.recovery_data),
             "common_data_sha256": file_digest(arguments.common_data),
             "later_data_sha256": file_digest(arguments.later_data),
+            "stale_to_blank_data_sha256": switch_digest,
+            "stale_to_blank_trial_count": 384,
             "later_recovery_new_trial_count": 128,
             "later_recovery_reused_control_count": 256,
             "original_trial_count": 2496,

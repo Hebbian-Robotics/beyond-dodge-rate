@@ -35,6 +35,7 @@ def main() -> None:
         ("camera-recovery-manifest", "recovery_data_sha256"),
         ("common-throw-manifest", "common_data_sha256"),
         ("later-recovery-manifest", "later_data_sha256"),
+        ("stale-to-blank-manifest", "stale_to_blank_data_sha256"),
     ):
         manifest = json.loads((repository / f"data/{manifest_name}.json").read_text())
         if manifest["sha256"] != verification[verification_key]:
@@ -53,6 +54,7 @@ def main() -> None:
         / "recovery-sensitivity/recovery-motion-effects.tex",
         "camera-recovery-effects.tex": analysis / "recovery/camera-recovery-effects.tex",
         "camera-recovery-table.tex": analysis / "recovery/camera-recovery-table.tex",
+        "switch-table.tex": analysis / "stale-to-blank/switch-table.tex",
     }
     source = "\n".join((repository / "paper" / filename).read_text() for filename in source_files)
     referenced_inputs = set(

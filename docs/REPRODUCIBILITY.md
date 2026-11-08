@@ -1,9 +1,12 @@
 # Reproducing the results
 
 Read [current code, data and model availability](AVAILABILITY.md) first.
-All four trial archives are in the
+The four original trial archives are in the
 [Hugging Face dataset](https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate).
-Download them into `data/` before running the commands below:
+Download them into `data/` before running the commands below. The revised
+manuscript also uses a separate stale-to-blank control whose recorded-trial
+archive awaits public release. Its code, configurations, and reference results
+are included in this repository, as described below.
 
 ```sh
 uvx --from huggingface_hub hf download hebbianrobotics/beyond-dodge-rate \
@@ -59,7 +62,17 @@ trials, using the same held-out seeds. Its 130 file hashes and archive digest
 are in `data/later-recovery-manifest.json`. The earlier two-second and
 continuous-stale conditions are reused controls, not new simulations.
 
-To verify all four datasets and build the paper:
+The revision adds a separate 384-trial stale-to-blank control on reused recovery
+seed IDs. Its archive and 388 file hashes are recorded in
+`data/stale-to-blank-manifest.json`. These local trials are not pooled with the
+original recovery estimate. The recorded archive awaits public release; when
+obtained, place it at `data/stale-to-blank-data-v1.tar.gz`. Its manifest alone
+does not supply the recordings. The analysis command below requires this
+archive in addition to the four original datasets. Running fresh control
+simulations is described under [stale-to-blank control](#stale-to-blank-control).
+
+To verify all five datasets and prepare the paper sources (add `--tectonic
+tectonic` to compile the PDFs):
 
 ```sh
 uv run python scripts/reproduce.py \
@@ -67,11 +80,11 @@ uv run python scripts/reproduce.py \
   --recovery-data data/camera-recovery-data-v1.tar.gz \
   --common-data data/common-throw-data-v1.tar.gz \
   --later-data data/later-recovery-data-v1.tar.gz \
-  --output outputs/extended \
-  --tectonic tectonic
+  --switch-data data/stale-to-blank-data-v1.tar.gz \
+  --output outputs/extended
 ```
 
-The command verifies all four archives, recomputes the analyses and produces
+The command verifies all five archives, recomputes the analyses and produces
 one manuscript from `paper/main.tex`. With `--tectonic`, it writes a named
 `outputs/extended/paper/paper.pdf` and an anonymous
 `outputs/extended/paper/paper-anonymous.pdf`. Their scientific content and
@@ -80,7 +93,8 @@ It also writes `outputs/extended/paper/supplement.pdf`, containing additional
 methods, the full shared-throw table, and the demo description. The supplement
 is submitted separately from the main paper.
 Raw analyses and generated outputs remain outside source control; selected publication assets are copied into the site
-only after verification.
+only after verification. The stale-to-blank step also regenerates
+`outputs/extended/stale-to-blank/switch-table.tex`, used in the supplement.
 
 The data packages also retain exploratory timing and diagnostic analyses.
 These are reported separately from the fixed recovery cohort. See
@@ -139,6 +153,42 @@ Every new output directory must be fresh. Configurations identify all seeds and
 arms; evaluation never chooses a condition based on results. Physics, inference,
 floating-point libraries and hardware must be qualified for a fresh replication.
 New scientific results must not overwrite or be substituted into recorded data.
+
+### Stale-to-blank control
+
+`scripts/evaluate.py` implements the two-second stale-to-blank switch and
+records hashes of the native and supplied depth frames. The configurations
+`configs/stale-to-blank-upstream-v1.json` and
+`configs/stale-to-blank-team-v1.json` declare all 64 seeds and three camera
+conditions for each policy, giving 384 trials in total. Use separately frozen,
+inactive-ball-corrected input archives with the corresponding policy weights.
+The native source and weight files must match `data/inputs/upstream-corrected.json`
+and `data/inputs/team-corrected.json`, respectively. Run from the repository root:
+
+```sh
+uv run python scripts/evaluate.py \
+  --input-archive inputs/upstream-corrected/input.tar.gz \
+  --input-sha256 SHA256_OF_UPSTREAM_CORRECTED_ARCHIVE \
+  --config configs/stale-to-blank-upstream-v1.json \
+  --output outputs/stale-to-blank/upstream
+uv run python scripts/evaluate.py \
+  --input-archive inputs/team-corrected/input.tar.gz \
+  --input-sha256 SHA256_OF_TEAM_CORRECTED_ARCHIVE \
+  --config configs/stale-to-blank-team-v1.json \
+  --output outputs/stale-to-blank/team
+uv run python scripts/analyze_stale_to_blank.py \
+  --trials outputs/stale-to-blank \
+  --recovery-data data/camera-recovery-data-v1.tar.gz \
+  --output outputs/stale-to-blank-analysis
+```
+
+Replace the two SHA-256 placeholders with the digests of the corrected archives.
+The analyser checks camera schedules, all 128 matched triplets, pre-switch
+physical and supplied-frame histories, and outcome accounting. It writes
+`summary.json`, `trials.csv`, and the supplementary `switch-table.tex`, using
+10,000 paired bootstrap resamples. The archived reference results are retained
+in `results/stale-to-blank-v1/`. Fresh simulation outputs may differ across
+runtimes and must remain separate from those references.
 
 ## Figures and videos
 

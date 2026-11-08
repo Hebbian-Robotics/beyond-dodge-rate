@@ -59,7 +59,8 @@ uv run python scripts/analyze_original_study.py \
   --data data/evaluation-data.tar.gz --output outputs/reproduced
 ```
 
-To verify all four archives and rebuild the paper, see
+To verify the four original archives and the revision's separate stale-to-blank
+control and rebuild the paper, see
 [reproduction](docs/REPRODUCIBILITY.md).
 
 ![Event-aligned simulation views comparing healthy depth, a freeze at launch, and a freeze after 320 milliseconds.](site/assets/simulation-snapshots.png)
@@ -171,6 +172,7 @@ uncertainty, and the distinction between evaluation seeds and training runs.
 | Material | Where |
 | --- | --- |
 | Four recorded-trial archives (4,064 trials) | [Hugging Face dataset](https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate), hash-verified against `data/` |
+| Stale-to-blank control (384 trials) | Analysis code, configurations, reference results, and archive hashes are included; recorded-trial release pending. See [reproduction](docs/REPRODUCIBILITY.md#stale-to-blank-control). |
 | π₁ weights (released checkpoint) | [Original release](https://huggingface.co/nepyope/g1_depth_dodge/tree/10e207cb734a6c3edf792d4995ca59ae4641bf29) |
 | π₂ weights (separately trained) | [hebbianrobotics/g1-depth-dodge](https://huggingface.co/hebbianrobotics/g1-depth-dodge) |
 | Simulator and robot assets | Obtained from the original sources under their own licenses |

@@ -73,6 +73,14 @@ def evaluate_trial(request: dict[str, Any]) -> dict[str, Any]:
     plain_session: Any = None
     fault_onset = 1.0 + request.get("fault_onset_offset_seconds", 0.0)
     fault_duration = request.get("fault_duration_seconds")
+    blank_from = request.get("blank_from_seconds")
+    if blank_from is not None and not (
+        request["fault"]
+        and request.get("fault_frame_mode", "freeze") == "freeze"
+        and fault_duration is None
+        and fault_onset < blank_from < request["seconds"]
+    ):
+        raise ValueError("A stale-to-blank switch must occur during a continuous freeze")
     capture_events: list[dict[str, Any]] = []
     if request["response"] == "plain":
         options = ort.SessionOptions()
@@ -93,15 +101,27 @@ def evaluate_trial(request: dict[str, Any]) -> dict[str, Any]:
             and world.data.time + 1e-9 >= fault_onset
             and (fault_duration is None or world.data.time + 1e-9 < fault_onset + fault_duration)
         )
-        capture_events.append({"time": float(world.data.time), "frozen": fault_active})
+        supplied = current_depth
         if fault_active:
-            if request.get("fault_frame_mode", "freeze") == "zero":
-                return np.zeros_like(current_depth)
-            if frozen_depth is None:
-                frozen_depth = world.previous_capture_before_fault.copy()
-            return frozen_depth.copy()
-        world.previous_capture_before_fault = current_depth.copy()
-        return current_depth
+            if request.get("fault_frame_mode", "freeze") == "zero" or (
+                blank_from is not None and world.data.time + 1e-9 >= blank_from
+            ):
+                supplied = np.zeros_like(current_depth)
+            else:
+                if frozen_depth is None:
+                    frozen_depth = world.previous_capture_before_fault.copy()
+                supplied = frozen_depth.copy()
+        else:
+            world.previous_capture_before_fault = current_depth.copy()
+        event = {"time": float(world.data.time), "frozen": fault_active}
+        if request.get("audit_frames"):
+            event.update(
+                native_sha256=hashlib.sha256(current_depth.tobytes()).hexdigest(),
+                supplied_sha256=hashlib.sha256(supplied.tobytes()).hexdigest(),
+                supplied_nonzero=int(np.count_nonzero(supplied)),
+            )
+        capture_events.append(event)
+        return supplied
 
     def act(gyro: Any, joint_positions: Any, joint_velocities: Any, rotation: Any) -> Any:
         nonlocal held_action, intervention_time
@@ -191,6 +211,7 @@ def evaluate_trial(request: dict[str, Any]) -> dict[str, Any]:
         "fault_onset_seconds": fault_onset,
         "fault_duration_seconds": fault_duration,
         "fault_frame_mode": request.get("fault_frame_mode", "freeze"),
+        **({"blank_from_seconds": blank_from} if blank_from is not None else {}),
         "capture_events": capture_events,
         "state_frames": state_frames,
         "launch_state": launch_state,

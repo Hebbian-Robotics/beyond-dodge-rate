@@ -3,24 +3,24 @@
 \subsection{What viewers see}
 The demo presents synchronized replays of the experiments in this paper.
 Viewers compare camera conditions, pause at measured events, and follow the
-robot's pelvis relative to the 1\,m boundary. The examples use the first declared
+robot's pelvis relative to the allowed area of radius 1\,m. The examples use the first declared
 seeds; aggregate results are reported separately so that an illustrative trial
 is not mistaken for average performance.
 
-The overview video first compares healthy depth with camera freezes at ball
-launch and 320\,ms later. In the illustrated trial, the later freeze allows a
+The overview video first compares healthy input with stale-input faults at ball
+launch and 320\,ms later. In the illustrated trial, the later stale-input fault allows a
 dodge but the robot subsequently leaves the area. The video then compares
-restoration of fresh images, followed by healthy, stale, and blank images for
+fresh-image restoration, followed by healthy, stale, and blank input for
 $\pi_2$. The opening slide defines $\pi_1$ and $\pi_2$ and identifies their sources;
-separate tables report the 64-seed fixed recovery test and the 192-seed input
+separate tables report the 64-seed original restoration experiment and the 192-seed input
 comparison. These are two sets of learned weights trained with the same method
 and recorded settings, not two proposed training methods.
 
-The recovery replay compares continuously stale images with fresh
-images restored at two or three seconds. All three robots dodge the same throw;
+The recovery replay compares continuous stale input with fresh
+frames restored at two or three seconds. All three robots dodge the same throw;
 only the two-second restoration stays within the area in this example. The
 three-second example is labeled exploratory. The
-paper's aggregate recovery results, rather than this single replay, support
+paper's aggregate restoration results, rather than this single replay, support
 the reported effect.
 
 \subsection{Playback and setup}
@@ -36,7 +36,7 @@ Downloaded videos play offline. No physical robot, GPU, or special floor area
 is needed. Online playback of the YouTube version requires internet access.
 
 \subsection{Video}
-The overview video is available at \url{https://youtu.be/iXgu4AaxdYE}.
+The overview video is available at \url{https://youtu.be/w0CTj4a3SYs}.
 Synchronized replays are available on the project
 website linked below the paper title.
 
@@ -44,10 +44,68 @@ The results concern two fixed policies in one simulated G1 task. They do not
 establish hardware safety or variation across independent training runs.
 
 \subsection{Code, data and weight availability}
-Evaluation code and configurations are available in the project's public
-repository, linked from the project website. The four recorded-trial archives are prepared but have not been
-publicly released. The released reference weights can be obtained from their
-original source; the separately trained weights are not distributed.
-Recomputing the reported statistics requires the trial archives. Rerunning all
-simulations also requires the simulator assets and both sets of weights.
-Public end-to-end reproduction is therefore not currently available.
+Evaluation code, original configurations, dependency locks, and provenance are
+available through the project website. Four original recorded-trial archives
+are publicly released at
+\url{https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate}.
+They cover the original 2,496-trial study, the 800 pilot and original restoration
+trials, the 660 shared-throw and preflight trials, and the 128 later-restoration
+trials. Repository manifests specify archive and file hashes.
+
+The released reference weights are available at
+\url{https://huggingface.co/nepyope/g1_depth_dodge}.
+The evaluated $\pi_2$ actor and perception ONNX files are public at
+\url{https://huggingface.co/hebbianrobotics/g1-depth-dodge}.
+The shared encoders come from the reference release. The retained $\pi_2$
+training checkpoint is not distributed. Fresh simulation requires the pinned
+simulator, robot assets, and applicable model files under their original
+terms. Recomputing the original statistics requires the trial archives.
+Cross-runtime exact replay remains a separate qualification step.
+
+The 384 stale-to-blank control records await public release and are separate
+from the four public archives. Their archive and record hashes are in
+\path{data/stale-to-blank-manifest.json}; the retained archive is named
+\path{stale-to-blank-data-v1.tar.gz}. It contains each condition's configuration,
+frame-hash ledger, physical traces, native outcomes, and execution metadata.
+Reference summaries and per-seed outcomes are in
+\path{results/stale-to-blank-v1/}.
+
+\clearpage
+\subsection{Reproducing the stale-to-blank analysis}
+\begingroup\raggedright
+The repository includes \path{scripts/analyze_stale_to_blank.py}, its helper
+modules, both frozen configurations under \path{configs/}, the data manifests,
+and locked dependencies. Use Python 3.12 and \texttt{uv}. Download
+\path{camera-recovery-data-v1.tar.gz} from the dataset above and, once obtained,
+place the separate \path{stale-to-blank-data-v1.tar.gz} alongside it in
+\path{data/}. The latter archive is required for reproducing the retained
+control results and awaits public release. Run the following from the
+repository root; the trial and output directories must not already exist.
+\begingroup\footnotesize
+\begin{verbatim}
+uv sync --locked
+mkdir -p outputs/stale-to-blank-records
+tar -xzf data/stale-to-blank-data-v1.tar.gz \
+  -C outputs/stale-to-blank-records
+uv run python scripts/analyze_stale_to_blank.py \
+  --trials outputs/stale-to-blank-records \
+  --recovery-data \
+    data/camera-recovery-data-v1.tar.gz \
+  --output outputs/stale-to-blank-analysis
+\end{verbatim}
+\endgroup
+The command verifies the recovery archive and its file hashes, recomputes all
+384 control outcomes, checks all 128 matched triplets and their pre-switch
+camera and physical histories, and repeats the 10,000-resample paired
+bootstrap. It writes \path{summary.json} and \path{trials.csv} under
+\path{outputs/stale-to-blank-analysis/}; these should match the supplied files in
+\path{results/stale-to-blank-v1/}. It also generates the supplementary
+\path{switch-table.tex}. The original archive supplies the separate historical
+comparison, not pooled observations. This recorded-data analysis needs no
+weights, simulator execution, or GPU and does not assert exact cross-runtime
+replay. To run fresh simulations, use \path{scripts/evaluate.py} with
+\path{configs/stale-to-blank-upstream-v1.json} and
+\path{configs/stale-to-blank-team-v1.json} and the corresponding corrected
+simulator inputs and weights. The repository's reproduction guide gives the
+commands; fresh runs remain separate from the retained results.
+\par\endgroup
