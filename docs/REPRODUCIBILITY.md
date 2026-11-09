@@ -1,12 +1,12 @@
 # Reproducing the results
 
 Read [current code, data and model availability](AVAILABILITY.md) first.
-The four original trial archives are in the
+The five trial archives are in the
 [Hugging Face dataset](https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate).
 Download them into `data/` before running the commands below. The revised
-manuscript also uses a separate stale-to-blank control whose recorded-trial
-archive awaits public release. Its code, configurations, and reference results
-are included in this repository, as described below.
+manuscript also uses a separate stale-to-blank control. Its code,
+configurations, and reference results are included in this repository, as
+described below.
 
 ```sh
 uvx --from huggingface_hub hf download hebbianrobotics/beyond-dodge-rate \
@@ -62,13 +62,12 @@ trials, using the same held-out seeds. Its 130 file hashes and archive digest
 are in `data/later-recovery-manifest.json`. The earlier two-second and
 continuous-stale conditions are reused controls, not new simulations.
 
-The revision adds a separate 384-trial stale-to-blank control on reused recovery
+The fifth archive holds a separate 384-trial stale-to-blank control on reused recovery
 seed IDs. Its archive and 388 file hashes are recorded in
 `data/stale-to-blank-manifest.json`. These local trials are not pooled with the
-original recovery estimate. The recorded archive awaits public release; when
-obtained, place it at `data/stale-to-blank-data-v1.tar.gz`. Its manifest alone
-does not supply the recordings. The analysis command below requires this
-archive in addition to the four original datasets. Running fresh control
+original recovery estimate. The recorded archive is in the Hugging Face dataset;
+download it to `data/stale-to-blank-data-v1.tar.gz`. Its manifest alone does
+not supply the recordings. The analysis command below requires all five archives. Running fresh control
 simulations is described under [stale-to-blank control](#stale-to-blank-control).
 
 To verify all five datasets and prepare the paper sources (add `--tectonic

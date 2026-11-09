@@ -45,12 +45,13 @@ establish hardware safety or variation across independent training runs.
 
 \subsection{Code, data and weight availability}
 Evaluation code, original configurations, dependency locks, and provenance are
-available through the project website. Four original recorded-trial archives
+available through the project website. Five recorded-trial archives
 are publicly released at
 \url{https://huggingface.co/datasets/hebbianrobotics/beyond-dodge-rate}.
 They cover the original 2,496-trial study, the 800 pilot and original restoration
-trials, the 660 shared-throw and preflight trials, and the 128 later-restoration
-trials. Repository manifests specify archive and file hashes.
+trials, the 660 shared-throw and preflight trials, the 128 later-restoration
+trials, and the 384 stale-to-blank control trials. Repository manifests specify
+archive and file hashes.
 
 The released reference weights are available at
 \url{https://huggingface.co/nepyope/g1_depth_dodge}.
@@ -62,9 +63,8 @@ simulator, robot assets, and applicable model files under their original
 terms. Recomputing the original statistics requires the trial archives.
 Cross-runtime exact replay remains a separate qualification step.
 
-The 384 stale-to-blank control records await public release and are separate
-from the four public archives. Their archive and record hashes are in
-\path{data/stale-to-blank-manifest.json}; the retained archive is named
+The stale-to-blank archive's hash and its record hashes are in
+\path{data/stale-to-blank-manifest.json}; the archive is named
 \path{stale-to-blank-data-v1.tar.gz}. It contains each condition's configuration,
 frame-hash ledger, physical traces, native outcomes, and execution metadata.
 Reference summaries and per-seed outcomes are in
@@ -76,10 +76,10 @@ Reference summaries and per-seed outcomes are in
 The repository includes \path{scripts/analyze_stale_to_blank.py}, its helper
 modules, both frozen configurations under \path{configs/}, the data manifests,
 and locked dependencies. Use Python 3.12 and \texttt{uv}. Download
-\path{camera-recovery-data-v1.tar.gz} from the dataset above and, once obtained,
-place the separate \path{stale-to-blank-data-v1.tar.gz} alongside it in
+\path{camera-recovery-data-v1.tar.gz} and
+\path{stale-to-blank-data-v1.tar.gz} from the dataset above into
 \path{data/}. The latter archive is required for reproducing the retained
-control results and awaits public release. Run the following from the
+control results. Run the following from the
 repository root; the trial and output directories must not already exist.
 \begingroup\footnotesize
 \begin{verbatim}
